@@ -1,142 +1,276 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الهندسة الكهربائية</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0f172a;
-    color: white;
-}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:var(--color-background-tertiary)}
 
-header {
-    background: #020617;
-    padding: 15px;
-    text-align: center;
-    font-size: 22px;
-    font-weight: bold;
-}
+.site{max-width:900px;margin:0 auto;background:var(--color-background-primary)}
 
-nav {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    background: #1e293b;
-    padding: 10px;
-}
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:56px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-icon{width:28px;height:28px;border-radius:6px;background:#185FA5;display:flex;align-items:center;justify-content:center}
+.nav-icon svg{width:14px;height:14px}
+.nav-brand{font-size:15px;font-weight:500;color:var(--color-text-primary);letter-spacing:-.3px}
+.nav-brand span{color:#185FA5}
+.nav-links{display:flex;gap:0}
+.nav-link{padding:6px 14px;font-size:13px;color:var(--color-text-secondary);border:none;background:none;cursor:pointer;border-radius:6px}
+.nav-link:hover{color:var(--color-text-primary);background:var(--color-background-secondary)}
+.nav-link.act{color:#185FA5}
+.nav-cta{padding:6px 16px;font-size:13px;background:#185FA5;color:#fff;border:none;border-radius:6px;cursor:pointer}
 
-nav a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-}
+/* HERO */
+.hero{padding:72px 32px 64px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#185FA5;background:#E6F1FB;padding:4px 10px;border-radius:20px;margin-bottom:20px}
+.hero-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:#185FA5}
+.hero h1{font-size:36px;font-weight:500;color:var(--color-text-primary);line-height:1.2;margin-bottom:16px;letter-spacing:-.5px}
+.hero h1 span{color:#185FA5}
+.hero p{font-size:15px;color:var(--color-text-secondary);max-width:520px;line-height:1.7;margin-bottom:32px}
+.hero-actions{display:flex;gap:10px;align-items:center;margin-bottom:48px}
+.btn-prim{padding:10px 22px;background:#185FA5;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-weight:500}
+.btn-sec{padding:10px 22px;background:transparent;color:var(--color-text-primary);border:0.5px solid var(--color-border-secondary);border-radius:8px;font-size:14px;cursor:pointer}
+.hero-stats{display:flex;gap:40px}
+.stat-item{text-align:left}
+.stat-n{font-size:22px;font-weight:500;color:var(--color-text-primary)}
+.stat-l{font-size:12px;color:var(--color-text-tertiary);margin-top:2px}
 
-nav a:hover {
-    color: #38bdf8;
-}
+/* SECTION */
+.section{padding:48px 32px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.sec-header{margin-bottom:28px}
+.sec-label{font-size:11px;font-weight:500;color:#185FA5;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.sec-title{font-size:20px;font-weight:500;color:var(--color-text-primary);letter-spacing:-.3px}
+.sec-sub{font-size:14px;color:var(--color-text-secondary);margin-top:6px;line-height:1.6}
 
-.hero {
-    text-align: center;
-    padding: 80px 20px;
-}
+/* TOPIC GRID */
+.topic-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.topic-card{padding:20px;border:0.5px solid var(--color-border-tertiary);border-radius:12px;background:var(--color-background-primary);cursor:pointer;transition:border-color .15s}
+.topic-card:hover{border-color:var(--color-border-secondary)}
+.topic-ico{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.topic-ico svg{width:16px;height:16px}
+.topic-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.topic-desc{font-size:12px;color:var(--color-text-secondary);line-height:1.5}
+.topic-footer{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:0.5px solid var(--color-border-tertiary)}
+.topic-count{font-size:11px;color:var(--color-text-tertiary)}
+.topic-arrow{font-size:11px;color:#185FA5}
 
-.hero h1 {
-    font-size: 40px;
-    margin-bottom: 10px;
-}
+/* CALC STRIP */
+.calc-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.calc-card{padding:16px;border:0.5px solid var(--color-border-tertiary);border-radius:10px;background:var(--color-background-primary);cursor:pointer;transition:border-color .15s}
+.calc-card:hover{border-color:#185FA5}
+.calc-ico{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.calc-ico svg{width:14px;height:14px}
+.calc-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.calc-tag{font-size:11px;color:var(--color-text-tertiary)}
 
-.hero p {
-    color: #94a3b8;
-}
+/* LESSON LIST */
+.lesson-list{display:flex;flex-direction:column;gap:0}
+.lesson-row{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:0.5px solid var(--color-border-tertiary);cursor:pointer}
+.lesson-row:last-child{border-bottom:none}
+.lesson-row:hover .lesson-title{color:#185FA5}
+.lesson-level{width:52px;flex-shrink:0}
+.level-pill{display:inline-block;font-size:10px;font-weight:500;padding:3px 8px;border-radius:20px}
+.lv-b{background:#E1F5EE;color:#085041}
+.lv-m{background:#FAEEDA;color:#633806}
+.lv-a{background:#E6F1FB;color:#0C447C}
+.lesson-title{font-size:13px;font-weight:500;color:var(--color-text-primary);transition:color .15s;flex:1}
+.lesson-meta{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.lesson-time{font-size:11px;color:var(--color-text-tertiary)}
+.lesson-tag{font-size:11px;color:var(--color-text-secondary);background:var(--color-background-secondary);padding:2px 8px;border-radius:20px}
+.lesson-arr{font-size:12px;color:var(--color-text-tertiary)}
 
-.btn {
-    margin-top: 20px;
-    display: inline-block;
-    padding: 10px 20px;
-    background: #38bdf8;
-    color: black;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.section {
-    padding: 40px;
-    text-align: center;
-}
-
-.cards {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-}
-
-.card {
-    background: #1e293b;
-    padding: 20px;
-    border-radius: 10px;
-    width: 250px;
-}
-
-footer {
-    text-align: center;
-    padding: 20px;
-    background: #020617;
-    margin-top: 30px;
-    color: #94a3b8;
-}
+/* FOOTER */
+footer{padding:24px 32px;display:flex;align-items:center;justify-content:space-between}
+.foot-brand{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.foot-brand span{color:#185FA5}
+.foot-copy{font-size:12px;color:var(--color-text-tertiary)}
 </style>
-</head>
 
-<body>
-
-<header>
-⚡ موقع الهندسة الكهربائية
-</header>
+<div class="site">
 
 <nav>
-<a href="#">الرئيسية</a>
-<a href="#">الدروس</a>
-<a href="#">المصطلحات</a>
-<a href="#">اتصل بنا</a>
+  <div class="nav-logo">
+    <div class="nav-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+    </div>
+    <span class="nav-brand">élektra<span>.pro</span></span>
+  </div>
+  <div class="nav-links">
+    <button class="nav-link act" onclick="sendPrompt('Quels cours sont disponibles sur ce site?')">Cours</button>
+    <button class="nav-link" onclick="sendPrompt('Montre moi toutes les calculatrices disponibles')">Calculatrices</button>
+    <button class="nav-link" onclick="sendPrompt('Quels exercices pratiques sont disponibles?')">Exercices</button>
+    <button class="nav-link">Référence</button>
+  </div>
+  <button class="nav-cta" onclick="sendPrompt('Comment commencer à apprendre l\'électricité sur ce site?')">Commencer →</button>
 </nav>
 
-<section class="hero">
-<h1>تعلم الهندسة الكهربائية بسهولة</h1>
-<p>دروس، قوانين، ومصطلحات باللغة العربية والفرنسية</p>
-<a href="#" class="btn">ابدأ التعلم</a>
-</section>
-
-<section class="section">
-<h2>محتوى الموقع</h2>
-<div class="cards">
-
-<div class="card">
-<h3>📘 الدروس</h3>
-<p>شرح مبسط لكل مفاهيم الكهرباء</p>
+<div class="hero">
+  <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Plateforme éducative francophone</div>
+  <h1>Maîtrisez<br>l'électricité <span>par le calcul</span></h1>
+  <p>Des cours structurés, des calculatrices interactives et des exercices corrigés — du lycée jusqu'au niveau ingénieur.</p>
+  <div class="hero-actions">
+    <button class="btn-prim" onclick="sendPrompt('Par où commencer pour un débutant en électricité?')">Commencer gratuitement</button>
+    <button class="btn-sec" onclick="sendPrompt('Montre moi un exemple de cours interactif sur la loi d\'Ohm')">Voir un cours →</button>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item"><div class="stat-n">54</div><div class="stat-l">Cours interactifs</div></div>
+    <div class="stat-item"><div class="stat-n">18</div><div class="stat-l">Calculatrices</div></div>
+    <div class="stat-item"><div class="stat-n">240+</div><div class="stat-l">Exercices corrigés</div></div>
+    <div class="stat-item"><div class="stat-n">3</div><div class="stat-l">Niveaux</div></div>
+  </div>
 </div>
 
-<div class="card">
-<h3>📖 المصطلحات</h3>
-<p>ترجمة عربي / فرنسي</p>
+<div class="section">
+  <div class="sec-header">
+    <div class="sec-label">Thèmes principaux</div>
+    <div class="sec-title">Tous les domaines couverts</div>
+    <div class="sec-sub">Du courant continu aux machines électriques — contenu aligné sur les programmes tunisiens et français.</div>
+  </div>
+  <div class="topic-grid">
+    <div class="topic-card" onclick="sendPrompt('Explique moi les circuits en courant continu')">
+      <div class="topic-ico" style="background:#E6F1FB">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
+      </div>
+      <div class="topic-title">Courant continu</div>
+      <div class="topic-desc">Loi d'Ohm, Kirchhoff, résistances, puissance DC</div>
+      <div class="topic-footer"><span class="topic-count">12 leçons</span><span class="topic-arrow">→</span></div>
+    </div>
+    <div class="topic-card" onclick="sendPrompt('Explique moi le courant alternatif AC')">
+      <div class="topic-ico" style="background:#E1F5EE">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2" stroke-linecap="round"><path d="M2 12Q5 4 8 12Q11 20 14 12Q17 4 20 12"/></svg>
+      </div>
+      <div class="topic-title">Courant alternatif</div>
+      <div class="topic-desc">Fréquence, déphasage, impédance, facteur de puissance</div>
+      <div class="topic-footer"><span class="topic-count">10 leçons</span><span class="topic-arrow">→</span></div>
+    </div>
+    <div class="topic-card" onclick="sendPrompt('Explique moi les transformateurs électriques')">
+      <div class="topic-ico" style="background:#FAEEDA">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="8" height="10" rx="2"/><rect x="14" y="7" width="8" height="10" rx="2"/><path d="M10 10h4M10 14h4"/></svg>
+      </div>
+      <div class="topic-title">Transformateurs</div>
+      <div class="topic-desc">Principe, rapport de transformation, pertes</div>
+      <div class="topic-footer"><span class="topic-count">8 leçons</span><span class="topic-arrow">→</span></div>
+    </div>
+    <div class="topic-card" onclick="sendPrompt('Explique moi les moteurs électriques DC et AC')">
+      <div class="topic-ico" style="background:#EEEDFE">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>
+      </div>
+      <div class="topic-title">Machines électriques</div>
+      <div class="topic-desc">Moteurs DC, AC, triphasés, couple et vitesse</div>
+      <div class="topic-footer"><span class="topic-count">11 leçons</span><span class="topic-arrow">→</span></div>
+    </div>
+    <div class="topic-card" onclick="sendPrompt('Explique moi les installations électriques et la sécurité')">
+      <div class="topic-ico" style="background:#EAF3DE">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#3B6D11" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="topic-title">Installations et sécurité</div>
+      <div class="topic-desc">Câblage, disjoncteurs, mise à la terre, normes</div>
+      <div class="topic-footer"><span class="topic-count">9 leçons</span><span class="topic-arrow">→</span></div>
+    </div>
+    <div class="topic-card" onclick="sendPrompt('Explique moi l\'électronique de puissance')">
+      <div class="topic-ico" style="background:#FAECE7">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#993C1D" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      </div>
+      <div class="topic-title">Électronique de puissance</div>
+      <div class="topic-desc">Redresseurs, onduleurs, variateurs de vitesse</div>
+      <div class="topic-footer"><span class="topic-count">7 leçons</span><span class="topic-arrow">→</span></div>
+    </div>
+  </div>
 </div>
 
-<div class="card">
-<h3>🧮 القوانين</h3>
-<p>قوانين الكهرباء مع أمثلة</p>
+<div class="section">
+  <div class="sec-header">
+    <div class="sec-label">Outils de calcul</div>
+    <div class="sec-title">Calculatrices interactives</div>
+    <div class="sec-sub">Entrez vos valeurs — résultats instantanés avec formules expliquées.</div>
+  </div>
+  <div class="calc-strip">
+    <div class="calc-card" onclick="sendPrompt('Ouvre la calculatrice loi d\'Ohm')">
+      <div class="calc-ico" style="background:#E6F1FB">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      </div>
+      <div class="calc-name">Loi d'Ohm</div>
+      <div class="calc-tag">V = R × I</div>
+    </div>
+    <div class="calc-card" onclick="sendPrompt('Ouvre la calculatrice de puissance électrique')">
+      <div class="calc-ico" style="background:#E1F5EE">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>
+      </div>
+      <div class="calc-name">Puissance</div>
+      <div class="calc-tag">P, Q, S, cos φ</div>
+    </div>
+    <div class="calc-card" onclick="sendPrompt('Ouvre la calculatrice de chute de tension')">
+      <div class="calc-ico" style="background:#FAEEDA">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="2" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="22"/><polyline points="6 8 12 2 18 8"/><polyline points="6 16 12 22 18 16"/></svg>
+      </div>
+      <div class="calc-name">Chute de tension</div>
+      <div class="calc-tag">Câbles, section</div>
+    </div>
+    <div class="calc-card" onclick="sendPrompt('Ouvre la calculatrice de coût de consommation électrique')">
+      <div class="calc-ico" style="background:#EEEDFE">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+      </div>
+      <div class="calc-name">Coût consommation</div>
+      <div class="calc-tag">kWh, tarif STEG</div>
+    </div>
+  </div>
 </div>
 
+<div class="section" style="border-bottom:none">
+  <div class="sec-header">
+    <div class="sec-label">Dernières leçons</div>
+    <div class="sec-title">Commencer par ici</div>
+  </div>
+  <div class="lesson-list">
+    <div class="lesson-row" onclick="sendPrompt('Explique moi la loi d\'Ohm avec des exemples et exercices corrigés')">
+      <div class="lesson-level"><span class="level-pill lv-b">Débutant</span></div>
+      <div class="lesson-title">Loi d'Ohm — de la théorie à l'application</div>
+      <div class="lesson-meta">
+        <span class="lesson-tag">Courant continu</span>
+        <span class="lesson-time">12 min</span>
+        <span class="lesson-arr">→</span>
+      </div>
+    </div>
+    <div class="lesson-row" onclick="sendPrompt('Explique moi les lois de Kirchhoff KVL et KCL avec exercices')">
+      <div class="lesson-level"><span class="level-pill lv-b">Débutant</span></div>
+      <div class="lesson-title">Lois de Kirchhoff — KVL et KCL</div>
+      <div class="lesson-meta">
+        <span class="lesson-tag">Circuits</span>
+        <span class="lesson-time">18 min</span>
+        <span class="lesson-arr">→</span>
+      </div>
+    </div>
+    <div class="lesson-row" onclick="sendPrompt('Explique moi le facteur de puissance et comment l\'améliorer')">
+      <div class="lesson-level"><span class="level-pill lv-m">Intermédiaire</span></div>
+      <div class="lesson-title">Facteur de puissance et compensation capacitive</div>
+      <div class="lesson-meta">
+        <span class="lesson-tag">Courant alternatif</span>
+        <span class="lesson-time">22 min</span>
+        <span class="lesson-arr">→</span>
+      </div>
+    </div>
+    <div class="lesson-row" onclick="sendPrompt('Explique moi les moteurs asynchrones triphasés')">
+      <div class="lesson-level"><span class="level-pill lv-a">Avancé</span></div>
+      <div class="lesson-title">Moteur asynchrone triphasé — principe et démarrage</div>
+      <div class="lesson-meta">
+        <span class="lesson-tag">Machines</span>
+        <span class="lesson-time">28 min</span>
+        <span class="lesson-arr">→</span>
+      </div>
+    </div>
+    <div class="lesson-row" onclick="sendPrompt('Explique moi comment calculer la section des câbles électriques')">
+      <div class="lesson-level"><span class="level-pill lv-m">Intermédiaire</span></div>
+      <div class="lesson-title">Dimensionnement des câbles et protection des circuits</div>
+      <div class="lesson-meta">
+        <span class="lesson-tag">Installations</span>
+        <span class="lesson-time">20 min</span>
+        <span class="lesson-arr">→</span>
+      </div>
+    </div>
+  </div>
 </div>
-</section>
 
 <footer>
-© 2026 - جميع الحقوق محفوظة
+  <div class="foot-brand">élektra<span>.pro</span></div>
+  <div class="foot-copy">Plateforme éducative — Ingénierie électrique en français</div>
 </footer>
 
-</body>
-</html>
+</div>
