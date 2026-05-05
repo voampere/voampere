@@ -3,378 +3,139 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Volt Ampere — أول منصة حسابات كهربائية عربية متخصصة للمهندسين والفنيين والطلاب">
+<meta name="keywords"    content="حاسبات كهربائية, هندسة كهربائية, قانون أوم, هبوط الجهد, حجم السلك">
+<meta property="og:title"       content="Volt Ampere — الحاسبات الكهربائية">
+<meta property="og:description" content="أدوات هندسية دقيقة للمهندسين العرب — مجانية وبلا إعلانات">
+<meta property="og:image"       content="assets/images/logo.png">
 <title>Volt Ampere — الحاسبات الكهربائية للمهندسين العرب</title>
+
+<!-- Favicon -->
+<link rel="icon"             type="image/x-icon" href="assets/icons/favicon.ico">
+<link rel="icon"             type="image/png"    href="assets/icons/favicon.png" sizes="32x32">
+<link rel="apple-touch-icon"                     href="assets/images/logo.png">
+
+<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<!-- Styles -->
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/components.css">
+
 <style>
-/* ═══════════════════════════════════════════
-   THEME VARIABLES
-═══════════════════════════════════════════ */
-:root {
-  --red:       #d42b1a;
-  --red-soft:  rgba(212,43,26,0.10);
-  --red-hover: #e83520;
-  --blue:      #1560cc;
-  --blue-soft: rgba(21,96,204,0.10);
-  --blue-hover:#1a6fe8;
-}
-
-[data-theme="light"] {
-  --bg:        #f0f2f5;
-  --surface:   #e4e8ed;
-  --card:      #ffffff;
-  --border:    #d0d8e4;
-  --text:      #1a2230;
-  --muted:     #5a6a7e;
-  --faint:     #e0e6ee;
-  --grid-line: rgba(21,96,204,0.06);
-  --shadow:    0 2px 12px rgba(21,96,204,0.08);
-}
-
-[data-theme="dark"] {
-  --bg:        #0f1318;
-  --surface:   #141a22;
-  --card:      #1a2230;
-  --border:    #243040;
-  --text:      #dde4ed;
-  --muted:     #6a8090;
-  --faint:     #1e2d3d;
-  --grid-line: rgba(21,96,204,0.04);
-  --shadow:    0 2px 16px rgba(0,0,0,0.35);
-}
-
-/* ═══════════════════════════════════════════
-   RESET & BASE
-═══════════════════════════════════════════ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: 'Cairo', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  overflow-x: hidden;
-  transition: background .3s, color .3s;
-}
-body::before {
-  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
-  background-image:
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 56px 56px;
-}
-
-/* ═══════════════════════════════════════════
-   NAV
-═══════════════════════════════════════════ */
-nav {
-  position: sticky; top: 0; z-index: 200; height: 62px;
-  background: var(--card);
-  border-bottom: 1px solid var(--border);
-  box-shadow: var(--shadow);
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 2rem;
-  transition: background .3s, border-color .3s;
-}
-
-.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.logo-wordmark { line-height: 1.2; }
-.logo-wordmark b { font-size: 17px; font-weight: 800; color: var(--text); letter-spacing: -.3px; }
-.logo-wordmark b .v { color: var(--red); }
-.logo-wordmark b .a { color: var(--blue); }
-.logo-wordmark small { display: block; font-size: 10px; color: var(--muted); letter-spacing: .4px; font-weight: 400; }
-
-.nav-links { display: flex; gap: 1.6rem; list-style: none; }
-.nav-links a { color: var(--muted); text-decoration: none; font-size: 13.5px; font-weight: 600; transition: color .18s; }
-.nav-links a:hover { color: var(--blue); }
-
-.nav-end { display: flex; align-items: center; gap: 10px; }
-
-/* Theme toggle */
-.theme-btn {
-  width: 38px; height: 22px; border-radius: 11px; border: none; cursor: pointer;
-  position: relative;
-  background: linear-gradient(135deg, var(--red), var(--blue));
-  transition: opacity .2s;
-  flex-shrink: 0;
-}
-.theme-btn::after {
-  content: ''; position: absolute; top: 3px;
-  width: 16px; height: 16px; border-radius: 50%;
-  background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.25);
-  transition: transform .25s;
-}
-[data-theme="light"] .theme-btn::after { transform: translateX(3px); right: auto; left: 3px; }
-[data-theme="dark"]  .theme-btn::after { transform: translateX(0); right: 3px; left: auto; }
-
-.theme-icon { font-size: 13px; color: var(--muted); }
-
-.nav-badge {
-  font-size: 11px; padding: 3px 10px; border-radius: 20px;
-  background: var(--red-soft); color: var(--red);
-  border: 1px solid rgba(212,43,26,.2); font-weight: 700;
-}
-
-/* ═══════════════════════════════════════════
-   HERO
-═══════════════════════════════════════════ */
-.hero {
-  position: relative; z-index: 1; max-width: 1120px; margin: 0 auto;
-  padding: 5.5rem 2rem 3.5rem;
-  display: grid; grid-template-columns: 1fr 360px; gap: 4rem; align-items: center;
-}
-@media(max-width:860px){ .hero{grid-template-columns:1fr;padding:3rem 1.2rem 2rem;} .hero-visual{display:none;} }
-
-.hero-label {
-  display: inline-flex; align-items: center; gap: 7px;
-  background: var(--blue-soft); border: 1px solid rgba(21,96,204,.25);
-  border-radius: 100px; padding: 4px 14px; font-size: 12px; color: var(--blue); font-weight: 700; margin-bottom: 1.6rem;
-}
-.hero-label::before {
-  content: ''; width: 6px; height: 6px; background: var(--blue);
-  border-radius: 50%; animation: blink 2s ease-in-out infinite;
-}
-@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
-
-.hero h1 {
-  font-size: clamp(2.2rem,5vw,3.7rem); font-weight: 900;
-  line-height: 1.12; letter-spacing: -1px; margin-bottom: 1.3rem; color: var(--text);
-}
-.h1-red { color: var(--red); } .h1-blue { color: var(--blue); }
-
-.hero-desc {
-  font-family: 'Tajawal', sans-serif; font-weight: 400;
-  font-size: 1rem; color: var(--muted); line-height: 1.85;
-  max-width: 480px; margin-bottom: 2.2rem;
-}
-
-.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-.btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 11px 24px; border-radius: 10px; font-size: 14px; font-weight: 700;
-  font-family: 'Cairo', sans-serif; text-decoration: none; cursor: pointer; border: none; transition: all .2s;
-}
-.btn-red   { background: var(--red);  color: #fff; }
-.btn-red:hover   { background: var(--red-hover);  transform: translateY(-1px); box-shadow: 0 6px 20px rgba(212,43,26,.28); }
-.btn-blue  { background: var(--blue); color: #fff; }
-.btn-blue:hover  { background: var(--blue-hover); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(21,96,204,.28); }
-.btn-ghost { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
-.btn-ghost:hover { border-color: var(--blue); color: var(--blue); }
-
-/* Hero VA animation */
-.hero-visual { display: flex; align-items: center; justify-content: center; position: relative; }
-.va-big {
-  font-size: 8rem; font-weight: 900; letter-spacing: -6px; line-height: 1;
-  user-select: none; position: relative; z-index: 2;
-  animation: floatBig 4s ease-in-out infinite;
-}
-@keyframes floatBig{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.va-big .v{color:var(--red);} .va-big .bolt{color:var(--muted);font-size:4.5rem;vertical-align:middle;position:relative;top:-4px;} .va-big .a{color:var(--blue);}
-.va-ring  { position:absolute;width:240px;height:240px;border-radius:50%;border:1.5px solid rgba(21,96,204,.15);animation:spin 18s linear infinite; }
-.va-ring2 { position:absolute;width:180px;height:180px;border-radius:50%;border:1.5px solid rgba(212,43,26,.12);animation:spin 12s linear infinite reverse; }
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* ═══════════════════════════════════════════
-   STATS
-═══════════════════════════════════════════ */
-.stats-wrap { position:relative;z-index:1;max-width:1120px;margin:0 auto 4rem;padding:0 2rem; }
-.stats-bar {
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
-  border:1px solid var(--border); border-radius:14px; overflow:hidden; gap:1px; background:var(--border);
-  box-shadow: var(--shadow);
-}
-.stat { background:var(--card); padding:1.25rem 1rem; text-align:center; transition:background .2s; }
-.stat:hover { background: var(--surface); }
-.stat-val { display:block; font-size:1.65rem; font-weight:900; letter-spacing:-1px; }
-.stat-val.red{color:var(--red);} .stat-val.blue{color:var(--blue);}
-.stat-lbl { font-size:11.5px; color:var(--muted); margin-top:3px; font-family:'Tajawal',sans-serif; }
-
-/* ═══════════════════════════════════════════
-   SECTIONS
-═══════════════════════════════════════════ */
-.section { position:relative;z-index:1;max-width:1120px;margin:0 auto 5rem;padding:0 2rem; }
-.sec-head {
-  display:flex;align-items:center;justify-content:space-between;
-  border-bottom:2px solid var(--border);padding-bottom:.9rem;margin-bottom:1.8rem;
-}
-.sec-title { font-size:1.15rem; font-weight:800; color:var(--text); }
-.sec-title span { color:var(--red); }
+/* ── Page-specific styles ── */
+.section  { max-width:1120px; margin:0 auto 5rem; padding:0 2rem; }
+.sec-head { display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--border);padding-bottom:.9rem;margin-bottom:1.8rem; }
+.sec-title { font-size:1.15rem;font-weight:800;color:var(--text); }
+.sec-title span{color:var(--red);}
 .sec-count { font-size:12px;color:var(--muted);font-family:'Tajawal',sans-serif; }
 
-/* ═══════════════════════════════════════════
-   CALC BOX
-═══════════════════════════════════════════ */
-.calc-box {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:18px; padding:1.8rem; margin-bottom:2rem;
-  box-shadow: var(--shadow);
-}
-.calc-head { display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem; }
-.calc-head-title { font-size:1rem;font-weight:700;color:var(--text); }
-.tabs { display:flex;gap:6px;flex-wrap:wrap; }
-.tab {
-  padding:6px 15px;border-radius:8px;font-size:13px;font-weight:700;
-  cursor:pointer;border:1.5px solid var(--border);background:transparent;
-  color:var(--muted);font-family:'Cairo',sans-serif;transition:all .18s;
-}
-.tab:hover:not(.ar):not(.ab) { border-color:var(--muted);color:var(--text); }
-.tab.ar { background:var(--red); color:#fff; border-color:var(--red); }
-.tab.ab { background:var(--blue); color:#fff; border-color:var(--blue); }
+/* Hero */
+.hero { max-width:1120px;margin:0 auto;padding:5.5rem 2rem 3.5rem;display:grid;grid-template-columns:1fr 360px;gap:4rem;align-items:center; }
+@media(max-width:860px){.hero{grid-template-columns:1fr;padding:3rem 1.2rem 2rem;}.hero-visual{display:none;}}
+.hero-label { display:inline-flex;align-items:center;gap:7px;background:var(--blue-soft);border:1px solid rgba(21,96,204,.25);border-radius:100px;padding:4px 14px;font-size:12px;color:var(--blue);font-weight:700;margin-bottom:1.6rem; }
+.hero-label::before{content:'';width:6px;height:6px;background:var(--blue);border-radius:50%;animation:blink 2s ease-in-out infinite;}
+.hero-desc { font-family:'Tajawal',sans-serif;font-weight:400;font-size:1rem;color:var(--muted);line-height:1.85;max-width:480px;margin-bottom:2.2rem; }
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
 
-.fields { display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:1rem; }
-.field label { display:block;font-size:12px;color:var(--muted);margin-bottom:5px;font-family:'Tajawal',sans-serif;font-weight:500; }
-.field input,.field select {
-  width:100%; background:var(--bg); border:1.5px solid var(--border);
-  border-radius:10px; padding:9px 13px; font-size:14px; color:var(--text);
-  font-family:'Cairo',sans-serif; outline:none; transition:border-color .18s, background .3s;
-}
-.field input:focus,.field select:focus {
-  border-color:var(--blue); box-shadow:0 0 0 3px rgba(21,96,204,.1);
-}
+/* VA animated icon */
+.hero-visual{display:flex;align-items:center;justify-content:center;position:relative;}
+.va-big{font-size:8rem;font-weight:900;letter-spacing:-6px;line-height:1;user-select:none;position:relative;z-index:2;animation:floatY 4s ease-in-out infinite;}
+.va-big .v{color:var(--red);}.va-big .bolt{color:var(--muted);font-size:4.5rem;vertical-align:middle;position:relative;top:-4px;}.va-big .a{color:var(--blue);}
+.va-ring{position:absolute;width:240px;height:240px;border-radius:50%;border:1.5px solid rgba(21,96,204,.15);animation:spin 18s linear infinite;}
+.va-ring2{position:absolute;width:180px;height:180px;border-radius:50%;border:1.5px solid rgba(212,43,26,.12);animation:spin 12s linear infinite reverse;}
 
-.results { display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:.8rem; }
-.res {
-  background:var(--bg); border:1.5px solid var(--border);
-  border-radius:12px; padding:1rem; text-align:center;
-  transition: background .3s;
-}
-.res-val { display:block;font-size:1.4rem;font-weight:900;letter-spacing:-.5px;direction:ltr; }
-.res-val.red{color:var(--red);} .res-val.blue{color:var(--blue);}
-.res-lbl { font-size:11px;color:var(--muted);margin-top:3px;font-family:'Tajawal',sans-serif; }
+/* Stats */
+.stats-wrap{max-width:1120px;margin:0 auto 4rem;padding:0 2rem;}
+.stats-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));border:1px solid var(--border);border-radius:14px;overflow:hidden;gap:1px;background:var(--border);box-shadow:var(--shadow);}
+.stat{background:var(--card);padding:1.25rem 1rem;text-align:center;transition:background .2s;}.stat:hover{background:var(--surface);}
+.stat-val{display:block;font-size:1.65rem;font-weight:900;letter-spacing:-1px;}.stat-val.red{color:var(--red);}.stat-val.blue{color:var(--blue);}
+.stat-lbl{font-size:11.5px;color:var(--muted);margin-top:3px;font-family:'Tajawal',sans-serif;}
 
-.warn-box {
-  margin-top:10px;padding:9px 13px;
-  background:var(--red-soft);border:1px solid rgba(212,43,26,.25);
-  border-radius:9px;font-size:12px;color:var(--red);
-  font-family:'Tajawal',sans-serif;display:none;
-}
+/* Calc box */
+.calc-box{background:var(--card);border:1.5px solid var(--border);border-radius:18px;padding:1.8rem;margin-bottom:2rem;box-shadow:var(--shadow);}
+.calc-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;}
+.calc-head-title{font-size:1rem;font-weight:700;color:var(--text);}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;}
+.tab{padding:6px 15px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-family:'Cairo',sans-serif;transition:all .18s;}
+.tab:hover:not(.ar):not(.ab){border-color:var(--muted);color:var(--text);}
+.tab.ar{background:var(--red);color:#fff;border-color:var(--red);}.tab.ab{background:var(--blue);color:#fff;border-color:var(--blue);}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:1rem;}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;font-family:'Tajawal',sans-serif;font-weight:500;}
+.field input,.field select{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:9px 13px;font-size:14px;color:var(--text);font-family:'Cairo',sans-serif;outline:none;transition:border-color .18s,background .3s;}
+.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,96,204,.10);}
+.results{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:.8rem;}
+.res{background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:1rem;text-align:center;transition:background .3s;}
+.res-val{display:block;font-size:1.4rem;font-weight:900;letter-spacing:-.5px;direction:ltr;}.res-val.red{color:var(--red);}.res-val.blue{color:var(--blue);}
+.res-lbl{font-size:11px;color:var(--muted);margin-top:3px;font-family:'Tajawal',sans-serif;}
+.note{font-size:11px;color:var(--muted);margin-top:10px;font-family:'Tajawal',sans-serif;line-height:1.6;}
 
-.note { font-size:11px;color:var(--muted);margin-top:10px;font-family:'Tajawal',sans-serif;line-height:1.6; }
+/* Domain filter */
+.domain-strip{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.6rem;}
+.dpill{display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:100px;border:1.5px solid var(--border);font-size:12.5px;color:var(--muted);cursor:pointer;background:var(--card);font-family:'Tajawal',sans-serif;transition:all .18s;}
+.dpill:hover,.dpill.on{border-color:var(--blue);color:var(--blue);background:var(--blue-soft);}
 
-/* ═══════════════════════════════════════════
-   CARDS GRID
-═══════════════════════════════════════════ */
-.domain-strip { display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.6rem; }
-.dpill {
-  display:flex;align-items:center;gap:5px;padding:6px 14px;
-  border-radius:100px;border:1.5px solid var(--border);font-size:12.5px;
-  color:var(--muted);cursor:pointer;background:var(--card);
-  font-family:'Tajawal',sans-serif;transition:all .18s;
-}
-.dpill:hover,.dpill.on {
-  border-color:var(--blue);color:var(--blue);background:var(--blue-soft);
-}
+/* Cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;}
+.ccard{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:1.4rem;cursor:pointer;transition:all .22s;text-decoration:none;display:block;box-shadow:var(--shadow);}
+.ccard:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(21,96,204,.12),0 0 0 2px var(--blue-soft);border-color:var(--blue);}
+.ccard-tag{display:inline-block;font-size:10.5px;padding:2px 9px;border-radius:6px;font-weight:700;margin-bottom:.75rem;font-family:'Tajawal',sans-serif;}
+.tag-r{background:var(--red-soft);color:var(--red);}.tag-b{background:var(--blue-soft);color:var(--blue);}
+.ccard-icon{font-size:1.7rem;margin-bottom:.65rem;display:block;}
+.ccard-title{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:.35rem;}
+.ccard-desc{font-size:12.5px;color:var(--muted);line-height:1.6;font-family:'Tajawal',sans-serif;}
+.ccard-formula{margin-top:.9rem;padding-top:.9rem;border-top:1px solid var(--faint);font-family:'Courier New',monospace;font-size:11.5px;color:var(--blue);direction:ltr;text-align:left;}
 
-.grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px; }
-
-.ccard {
-  background:var(--card);border:1.5px solid var(--border);
-  border-radius:14px;padding:1.4rem;cursor:pointer;
-  transition:all .22s;text-decoration:none;display:block;position:relative;
-  box-shadow: var(--shadow);
-}
-.ccard:hover { transform:translateY(-3px); box-shadow:0 12px 36px rgba(21,96,204,.12),0 0 0 2px var(--blue-soft); border-color:var(--blue); }
-.ccard-tag { display:inline-block;font-size:10.5px;padding:2px 9px;border-radius:6px;font-weight:700;margin-bottom:.75rem;font-family:'Tajawal',sans-serif; }
-.tag-r{background:var(--red-soft);color:var(--red);} .tag-b{background:var(--blue-soft);color:var(--blue);}
-.ccard-icon { font-size:1.7rem;margin-bottom:.65rem;display:block; }
-.ccard-title { font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:.35rem; }
-.ccard-desc { font-size:12.5px;color:var(--muted);line-height:1.6;font-family:'Tajawal',sans-serif;font-weight:400; }
-.ccard-formula {
-  margin-top:.9rem;padding-top:.9rem;border-top:1px solid var(--faint);
-  font-family:'Courier New',monospace;font-size:11.5px;color:var(--blue);
-  direction:ltr;text-align:left;
-}
-
-/* ═══════════════════════════════════════════
-   FOOTER
-═══════════════════════════════════════════ */
-footer {
-  position:relative;z-index:1;
-  border-top:1px solid var(--border);background:var(--card);
-  padding:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;
-  transition:background .3s;
-}
-.foot-name { font-size:15px;font-weight:800; }
-.foot-name .v{color:var(--red);} .foot-name .a{color:var(--blue);}
-.foot-sub { font-size:11px;color:var(--muted);margin-top:2px;font-family:'Tajawal',sans-serif; }
-.foot-links { display:flex;gap:1.4rem; }
-.foot-links a { font-size:13px;color:var(--muted);text-decoration:none;font-family:'Tajawal',sans-serif;transition:color .15s; }
-.foot-links a:hover { color:var(--blue); }
-.foot-copy { font-size:11px;color:var(--muted);font-family:'Tajawal',sans-serif; }
-
-/* ═══════════════════════════════════════════
-   ANIMATIONS
-═══════════════════════════════════════════ */
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-.hero{animation:fadeUp .5s ease both;}
-.stats-wrap{animation:fadeUp .5s .1s ease both;}
-.section{animation:fadeUp .5s .18s ease both;}
-
-@media(max-width:600px){
-  nav{padding:0 1rem;} .nav-links{display:none;}
-  .stats-wrap,.section{padding:0 1rem;}
-  footer{padding:1.4rem 1rem;flex-direction:column;align-items:flex-start;}
-}
+@media(max-width:600px){.section{padding:0 1rem;}.stats-wrap{padding:0 1rem;}}
 </style>
 </head>
 <body>
 
 <!-- ══ NAV ══ -->
-<nav>
-  <a href="#" class="logo">
-    <svg width="52" height="30" viewBox="0 0 90 52" fill="none">
-      <path d="M3 5L15 45L22 45L29 5L24 5L18.5 33L14 5Z" fill="#d42b1a"/>
-      <path d="M41 5L34 27L39 27L31 45L49 21L43 21L50 5Z" fill="#8090a0"/>
-      <path d="M55 5L43 45L49 45L52 35L65 35L68 45L74 45L62 5Z M54 30L58.5 16L63 30Z" fill="#1560cc"/>
-    </svg>
-    <div class="logo-wordmark">
+<nav class="va-nav z1">
+  <a href="index.html" class="va-logo">
+    <img src="assets/icons/favicon.png" alt="Volt Ampere">
+    <div class="va-logo-text">
       <b><span class="v">Volt</span> <span class="a">Ampere</span></b>
       <small>voampere.com</small>
     </div>
   </a>
 
-  <ul class="nav-links">
-    <li><a href="#calc">الحاسبات</a></li>
-    <li><a href="#all">المجالات</a></li>
-    <li><a href="#">المعايير</a></li>
-    <li><a href="#">تواصل</a></li>
+  <ul class="va-nav-links">
+    <li><a href="index.html"              class="active">الرئيسية</a></li>
+    <li><a href="#all">الحاسبات</a></li>
+    <li><a href="pages/about.html">عن المنصة</a></li>
+    <li><a href="pages/contact.html">تواصل</a></li>
   </ul>
 
-  <div class="nav-end">
+  <div class="va-nav-end">
     <span class="theme-icon" id="theme-icon">🌙</span>
-    <button class="theme-btn" onclick="toggleTheme()" title="تبديل الوضع"></button>
-    <span class="nav-badge">قريباً</span>
+    <button class="theme-btn" onclick="Theme.toggle()" title="تبديل الوضع"></button>
+    <span class="va-badge">قريباً</span>
   </div>
 </nav>
 
 <!-- ══ HERO ══ -->
-<div class="hero">
+<div class="hero z1 anim-fadeup">
   <div>
     <div class="hero-label">أول منصة حسابات كهربائية عربية متخصصة</div>
-    <h1>
-      <em class="h1-red">Volt</em> <em class="h1-blue">Ampere</em><br>
-      حاسبات الهندسة<br>الكهربائية
-    </h1>
-    <p class="hero-desc">
-      أدوات تقنية دقيقة لكل حسابات الكهرباء اليومية — للمهندسين والفنيين والطلاب في جميع الدول العربية.
-      معايير IEC معتمدة، مجانية وبلا إعلانات.
-    </p>
+    <h1><em class="text-red">Volt</em> <em class="text-blue">Ampere</em><br>حاسبات الهندسة الكهربائية</h1>
+    <p class="hero-desc">أدوات تقنية دقيقة لكل حسابات الكهرباء اليومية — للمهندسين والفنيين والطلاب في جميع الدول العربية. معايير IEC معتمدة، مجانية وبلا إعلانات.</p>
     <div class="hero-actions">
       <a href="#calc" class="btn btn-red">ابدأ الحساب ⚡</a>
       <a href="#all"  class="btn btn-blue">كل الحاسبات</a>
-      <a href="#"     class="btn btn-ghost">المعايير المعتمدة</a>
+      <a href="pages/about.html" class="btn btn-ghost">عن المنصة</a>
     </div>
   </div>
   <div class="hero-visual">
-    <div class="va-ring"></div>
-    <div class="va-ring2"></div>
-    <div class="va-big">
-      <span class="v">V</span><span class="bolt">⚡</span><span class="a">A</span>
-    </div>
+    <div class="va-ring"></div><div class="va-ring2"></div>
+    <div class="va-big"><span class="v">V</span><span class="bolt">⚡</span><span class="a">A</span></div>
   </div>
 </div>
 
 <!-- ══ STATS ══ -->
-<div class="stats-wrap">
+<div class="stats-wrap z1 anim-fadeup anim-delay1">
   <div class="stats-bar">
     <div class="stat"><span class="stat-val red">20+</span><span class="stat-lbl">حاسبة تفاعلية</span></div>
     <div class="stat"><span class="stat-val blue">8</span><span class="stat-lbl">مجالات كهربائية</span></div>
@@ -385,8 +146,8 @@ footer {
   </div>
 </div>
 
-<!-- ══ FEATURED CALC ══ -->
-<section class="section" id="calc">
+<!-- ══ MAIN CALC ══ -->
+<section class="section z1 anim-fadeup anim-delay2" id="calc">
   <div class="sec-head">
     <span class="sec-title">الحاسبة <span>الرئيسية</span></span>
     <span class="sec-count">جرّبها مباشرة</span>
@@ -405,9 +166,9 @@ footer {
     <!-- OHM -->
     <div id="p-ohm">
       <div class="fields">
-        <div class="field"><label>الجهد — V (فولت)</label><input type="number" id="ov" placeholder="—" oninput="ohm('v')"></div>
-        <div class="field"><label>التيار — I (أمبير)</label><input type="number" id="oi" placeholder="—" oninput="ohm('i')"></div>
-        <div class="field"><label>المقاومة — R (أوم)</label><input type="number" id="or_" placeholder="—" oninput="ohm('r')"></div>
+        <div class="field"><label>الجهد — V (فولت)</label><input type="number" id="ov" placeholder="—" oninput="calcOhm('v')"></div>
+        <div class="field"><label>التيار — I (أمبير)</label><input type="number" id="oi" placeholder="—" oninput="calcOhm('i')"></div>
+        <div class="field"><label>المقاومة — R (أوم)</label><input type="number" id="or_" placeholder="—" oninput="calcOhm('r')"></div>
       </div>
       <div class="results">
         <div class="res"><span class="res-val red"  id="orv">—</span><span class="res-lbl">جهد (V)</span></div>
@@ -420,12 +181,10 @@ footer {
     <!-- WIRE -->
     <div id="p-wire" style="display:none">
       <div class="fields">
-        <div class="field"><label>التيار (A)</label><input type="number" id="wi" value="20" oninput="wir()"></div>
-        <div class="field"><label>طول الدائرة (م)</label><input type="number" id="wl" value="25" oninput="wir()"></div>
-        <div class="field"><label>الجهد (V)</label><input type="number" id="wv" value="230" oninput="wir()"></div>
-        <div class="field"><label>نوع الموصل</label>
-          <select id="wm" onchange="wir()"><option value="cu">نحاس</option><option value="al">ألمنيوم</option></select>
-        </div>
+        <div class="field"><label>التيار (A)</label><input type="number" id="wi" value="20" oninput="calcWire()"></div>
+        <div class="field"><label>طول الدائرة (م)</label><input type="number" id="wl" value="25" oninput="calcWire()"></div>
+        <div class="field"><label>الجهد (V)</label><input type="number" id="wv" value="230" oninput="calcWire()"></div>
+        <div class="field"><label>نوع الموصل</label><select id="wm" onchange="calcWire()"><option value="cu">نحاس</option><option value="al">ألمنيوم</option></select></div>
       </div>
       <div class="results">
         <div class="res"><span class="res-val blue" id="wrs">—</span><span class="res-lbl">المقطع (mm²)</span></div>
@@ -438,12 +197,10 @@ footer {
     <!-- POWER -->
     <div id="p-pow" style="display:none">
       <div class="fields">
-        <div class="field"><label>القدرة الفعالة P (W)</label><input type="number" id="pp" value="5000" oninput="pw()"></div>
-        <div class="field"><label>الجهد V (فولت)</label><input type="number" id="pv" value="230" oninput="pw()"></div>
-        <div class="field"><label>معامل القدرة cosφ</label><input type="number" id="pc" value="0.85" step="0.01" min="0.1" max="1" oninput="pw()"></div>
-        <div class="field"><label>نوع الشبكة</label>
-          <select id="pt" onchange="pw()"><option value="1">أحادي الطور</option><option value="3">ثلاثي الأطوار</option></select>
-        </div>
+        <div class="field"><label>القدرة الفعالة P (W)</label><input type="number" id="pp" value="5000" oninput="calcPower()"></div>
+        <div class="field"><label>الجهد V (فولت)</label><input type="number" id="pv" value="230" oninput="calcPower()"></div>
+        <div class="field"><label>معامل القدرة cosφ</label><input type="number" id="pc" value="0.85" step="0.01" oninput="calcPower()"></div>
+        <div class="field"><label>نوع الشبكة</label><select id="pt" onchange="calcPower()"><option value="1">أحادي الطور</option><option value="3">ثلاثي الأطوار</option></select></div>
       </div>
       <div class="results">
         <div class="res"><span class="res-val red"  id="pri">—</span><span class="res-lbl">التيار (A)</span></div>
@@ -452,35 +209,36 @@ footer {
       </div>
     </div>
 
-    <!-- ELECTRICITY COST — ARAB COUNTRIES -->
+    <!-- COST -->
     <div id="p-cost" style="display:none">
       <div class="fields">
-        <div class="field">
-          <label>الدولة</label>
-          <select id="cc" onchange="cst()">
-            <option value="0.05">المملكة العربية السعودية (0.05 $/kWh)</option>
-            <option value="0.03">الكويت (0.03 $/kWh)</option>
-            <option value="0.08">مصر (0.08 $/kWh)</option>
-            <option value="0.10">المغرب (0.10 $/kWh)</option>
-            <option value="0.07" selected>تونس (0.07 $/kWh)</option>
-            <option value="0.06">الجزائر (0.06 $/kWh)</option>
-            <option value="0.09">الأردن (0.09 $/kWh)</option>
-            <option value="0.04">الإمارات (0.04 $/kWh)</option>
-            <option value="0.04">قطر (0.04 $/kWh)</option>
-            <option value="0.03">البحرين (0.03 $/kWh)</option>
-            <option value="0.02">ليبيا (0.02 $/kWh)</option>
-            <option value="0.06">لبنان (0.06 $/kWh)</option>
-            <option value="custom">أدخل سعرًا مخصصًا</option>
+        <div class="field"><label>الدولة</label>
+          <select id="cc" onchange="calcCost()">
+            <option value="sa">🇸🇦 السعودية — 0.048 $/kWh</option>
+            <option value="kw">🇰🇼 الكويت — 0.030 $/kWh</option>
+            <option value="ae">🇦🇪 الإمارات — 0.042 $/kWh</option>
+            <option value="qa">🇶🇦 قطر — 0.035 $/kWh</option>
+            <option value="bh">🇧🇭 البحرين — 0.031 $/kWh</option>
+            <option value="om">🇴🇲 عُمان — 0.060 $/kWh</option>
+            <option value="eg">🇪🇬 مصر — 0.080 $/kWh</option>
+            <option value="ma">🇲🇦 المغرب — 0.105 $/kWh</option>
+            <option value="tn" selected>🇹🇳 تونس — 0.072 $/kWh</option>
+            <option value="dz">🇩🇿 الجزائر — 0.055 $/kWh</option>
+            <option value="jo">🇯🇴 الأردن — 0.092 $/kWh</option>
+            <option value="lb">🇱🇧 لبنان — 0.060 $/kWh</option>
+            <option value="ly">🇱🇾 ليبيا — 0.020 $/kWh</option>
+            <option value="iq">🇮🇶 العراق — 0.030 $/kWh</option>
+            <option value="custom">⚙️ سعر مخصص</option>
           </select>
         </div>
-        <div class="field"><label>القدرة الكلية (W)</label><input type="number" id="cp" value="2000" oninput="cst()"></div>
-        <div class="field"><label>ساعات الاستخدام / يوم</label><input type="number" id="ch" value="8" oninput="cst()"></div>
-        <div class="field"><label>أيام / شهر</label><input type="number" id="cd" value="30" oninput="cst()"></div>
+        <div class="field"><label>القدرة الكلية (W)</label><input type="number" id="cp" value="2000" oninput="calcCost()"></div>
+        <div class="field"><label>ساعات / يوم</label><input type="number" id="ch" value="8" oninput="calcCost()"></div>
+        <div class="field"><label>أيام / شهر</label><input type="number" id="cd" value="30" oninput="calcCost()"></div>
       </div>
-      <div id="custom-rate-wrap" style="display:none;margin-bottom:12px;">
-        <div class="field" style="max-width:220px;">
+      <div id="custom-rate-wrap" style="display:none;margin-bottom:12px">
+        <div class="field" style="max-width:220px">
           <label>السعر المخصص ($/kWh)</label>
-          <input type="number" id="cr" value="0.08" step="0.01" oninput="cst()">
+          <input type="number" id="cr" value="0.08" step="0.01" oninput="calcCost()">
         </div>
       </div>
       <div class="results">
@@ -488,161 +246,72 @@ footer {
         <div class="res"><span class="res-val red"  id="crc">—</span><span class="res-lbl">التكلفة / شهر ($)</span></div>
         <div class="res"><span class="res-val blue" id="cry">—</span><span class="res-lbl">التكلفة / سنة ($)</span></div>
       </div>
-      <p class="note">* الأسعار تقريبية وفق متوسطات 2024 — تختلف حسب الشريحة الاستهلاكية ونوع المشترك (منزلي/تجاري/صناعي)</p>
+      <p class="note">* الأسعار متوسطات 2024 — تختلف حسب الشريحة الاستهلاكية ونوع المشترك (منزلي / تجاري / صناعي)</p>
     </div>
   </div>
 </section>
 
-<!-- ══ CARDS GRID ══ -->
-<section class="section" id="all">
+<!-- ══ ALL CALCS ══ -->
+<section class="section z1" id="all">
   <div class="sec-head">
     <span class="sec-title">كل <span>الحاسبات</span></span>
     <span class="sec-count">20+ أداة مجانية</span>
   </div>
   <div class="domain-strip">
-    <div class="dpill on" onclick="fd('all',this)">🔌 الكل</div>
-    <div class="dpill"    onclick="fd('basic',this)">⚡ أساسيات</div>
-    <div class="dpill"    onclick="fd('power',this)">🔋 الطاقة</div>
-    <div class="dpill"    onclick="fd('wire',this)">🔧 التركيبات</div>
-    <div class="dpill"    onclick="fd('motor',this)">⚙️ المحركات</div>
-    <div class="dpill"    onclick="fd('solar',this)">☀️ شمسية</div>
+    <div class="dpill on" onclick="filterDomain('all',this)">🔌 الكل</div>
+    <div class="dpill"    onclick="filterDomain('basic',this)">⚡ أساسيات</div>
+    <div class="dpill"    onclick="filterDomain('power',this)">🔋 الطاقة</div>
+    <div class="dpill"    onclick="filterDomain('wire',this)">🔧 التركيبات</div>
+    <div class="dpill"    onclick="filterDomain('motor',this)">⚙️ المحركات</div>
+    <div class="dpill"    onclick="filterDomain('solar',this)">☀️ شمسية</div>
   </div>
   <div class="grid">
-    <a class="ccard" data-d="basic" href="#"><span class="ccard-tag tag-r">أساسيات</span><span class="ccard-icon">⚡</span><div class="ccard-title">قانون أوم</div><div class="ccard-desc">الجهد والتيار والمقاومة والقدرة بإدخال أي قيمتين</div><div class="ccard-formula">V = I × R | P = V × I</div></a>
-    <a class="ccard" data-d="wire"  href="#"><span class="ccard-tag tag-b">التركيبات</span><span class="ccard-icon">🔧</span><div class="ccard-title">حجم السلك والكابل</div><div class="ccard-desc">المقطع المناسب وفق التيار والطول ومعيار IEC 60364</div><div class="ccard-formula">S = (2×ρ×L×I) / (ΔU×V)</div></a>
-    <a class="ccard" data-d="wire"  href="#"><span class="ccard-tag tag-b">التركيبات</span><span class="ccard-icon">📉</span><div class="ccard-title">هبوط الجهد</div><div class="ccard-desc">نسبة هبوط الجهد في الكابلات أحادية وثلاثية الأطوار</div><div class="ccard-formula">ΔU% = (2×ρ×L×I)/(S×V)×100</div></a>
-    <a class="ccard" data-d="power" href="#"><span class="ccard-tag tag-r">الطاقة</span><span class="ccard-icon">🔋</span><div class="ccard-title">القدرة الفعالة والظاهرة</div><div class="ccard-desc">P وQ وS مع معامل القدرة للأحمال أحادية وثلاثية</div><div class="ccard-formula">S = P / cosφ | Q = √(S²-P²)</div></a>
-    <a class="ccard" data-d="power" href="#"><span class="ccard-tag tag-r">الطاقة</span><span class="ccard-icon">🌍</span><div class="ccard-title">تكلفة الكهرباء — الدول العربية</div><div class="ccard-desc">احسب فاتورتك الشهرية والسنوية لأي دولة عربية</div><div class="ccard-formula">Cost = kWh × price_per_kWh</div></a>
-    <a class="ccard" data-d="basic" href="#"><span class="ccard-tag tag-r">أساسيات</span><span class="ccard-icon">🎨</span><div class="ccard-title">رمز ألوان المقاومة</div><div class="ccard-desc">قراءة قيمة المقاومة من أشرطة الألوان 4 و5 شرائط</div><div class="ccard-formula">R = (d₁d₂) × 10ⁿ Ω</div></a>
-    <a class="ccard" data-d="motor" href="#"><span class="ccard-tag tag-b">المحركات</span><span class="ccard-icon">⚙️</span><div class="ccard-title">تيار المحرك الكهربائي</div><div class="ccard-desc">تيار التشغيل لمحركات أحادية وثلاثية مع معامل الكفاءة η</div><div class="ccard-formula">I = P / (√3 × V × cosφ × η)</div></a>
-    <a class="ccard" data-d="basic" href="#"><span class="ccard-tag tag-r">أساسيات</span><span class="ccard-icon">🔗</span><div class="ccard-title">المقاومات والمكثفات</div><div class="ccard-desc">القيمة المكافئة على التوالي والتوازي</div><div class="ccard-formula">1/R = 1/R₁ + 1/R₂ + …</div></a>
-    <a class="ccard" data-d="solar" href="#"><span class="ccard-tag tag-b">شمسية</span><span class="ccard-icon">☀️</span><div class="ccard-title">تصميم نظام شمسي</div><div class="ccard-desc">عدد الألواح والبطاريات والعاكس لنظام معزول أو شبكي</div><div class="ccard-formula">N = E_daily / (G × η × A)</div></a>
-    <a class="ccard" data-d="wire"  href="#"><span class="ccard-tag tag-b">التركيبات</span><span class="ccard-icon">🛡️</span><div class="ccard-title">اختيار قاطع الحماية</div><div class="ccard-desc">رتبة القاطع MCB/MCCB المناسبة مع هامش الأمان</div><div class="ccard-formula">I_CB ≥ 1.25 × I_charge</div></a>
-    <a class="ccard" data-d="power" href="#"><span class="ccard-tag tag-r">الطاقة</span><span class="ccard-icon">🔄</span><div class="ccard-title">تصحيح معامل القدرة</div><div class="ccard-desc">سعة المكثف اللازمة لرفع cosφ إلى القيمة المطلوبة</div><div class="ccard-formula">Q_C = P × (tanφ₁ - tanφ₂)</div></a>
-    <a class="ccard" data-d="motor" href="#"><span class="ccard-tag tag-b">المحركات</span><span class="ccard-icon">🌡️</span><div class="ccard-title">تيار إقلاع المحرك</div><div class="ccard-desc">تيار الإقلاع LRA وتأثيره على شبكة التغذية</div><div class="ccard-formula">I_start ≈ 5~8 × I_nominal</div></a>
+    <a class="ccard" data-d="basic" href="calculators/ohm.html"><span class="ccard-tag tag-r">أساسيات</span><span class="ccard-icon">⚡</span><div class="ccard-title">قانون أوم</div><div class="ccard-desc">الجهد والتيار والمقاومة والقدرة بإدخال أي قيمتين</div><div class="ccard-formula">V = I × R | P = V × I</div></a>
+    <a class="ccard" data-d="wire"  href="calculators/wire.html"><span class="ccard-tag tag-b">التركيبات</span><span class="ccard-icon">🔧</span><div class="ccard-title">حجم السلك والكابل</div><div class="ccard-desc">المقطع المناسب وفق التيار والطول — معيار IEC 60364</div><div class="ccard-formula">S = (2×ρ×L×I) / (ΔU×V)</div></a>
+    <a class="ccard" data-d="wire"  href="calculators/voltage-drop.html"><span class="ccard-tag tag-b">التركيبات</span><span class="ccard-icon">📉</span><div class="ccard-title">هبوط الجهد</div><div class="ccard-desc">نسبة هبوط الجهد في الكابلات أحادية وثلاثية</div><div class="ccard-formula">ΔU% = (2×ρ×L×I)/(S×V)×100</div></a>
+    <a class="ccard" data-d="power" href="calculators/power.html"><span class="ccard-tag tag-r">الطاقة</span><span class="ccard-icon">🔋</span><div class="ccard-title">القدرة الفعالة والظاهرة</div><div class="ccard-desc">P وQ وS مع معامل القدرة أحادي وثلاثي الأطوار</div><div class="ccard-formula">S = P / cosφ | Q = √(S²-P²)</div></a>
+    <a class="ccard" data-d="power" href="calculators/cost.html"><span class="ccard-tag tag-r">الطاقة</span><span class="ccard-icon">🌍</span><div class="ccard-title">تكلفة الكهرباء — الدول العربية</div><div class="ccard-desc">احسب فاتورتك الشهرية والسنوية لأي دولة عربية</div><div class="ccard-formula">Cost = kWh × price_per_kWh</div></a>
+    <a class="ccard" data-d="basic" href="calculators/resistor-color.html"><span class="ccard-tag tag-r">أساسيات</span><span class="ccard-icon">🎨</span><div class="ccard-title">رمز ألوان المقاومة</div><div class="ccard-desc">اقرأ قيمة المقاومة من أشرطة الألوان 4 و5 شرائط</div><div class="ccard-formula">R = (d₁d₂) × 10ⁿ Ω</div></a>
+    <a class="ccard" data-d="motor" href="calculators/motor.html"><span class="ccard-tag tag-b">المحركات</span><span class="ccard-icon">⚙️</span><div class="ccard-title">تيار المحرك الكهربائي</div><div class="ccard-desc">تيار التشغيل والإقلاع لمحركات أحادية وثلاثية مع η</div><div class="ccard-formula">I = P / (√3 × V × cosφ × η)</div></a>
+    <a class="ccard" data-d="basic" href="calculators/series-parallel.html"><span class="ccard-tag tag-r">أساسيات</span><span class="ccard-icon">🔗</span><div class="ccard-title">المقاومات والمكثفات</div><div class="ccard-desc">القيمة المكافئة على التوالي والتوازي</div><div class="ccard-formula">1/R = 1/R₁ + 1/R₂ + …</div></a>
+    <a class="ccard" data-d="solar" href="calculators/solar.html"><span class="ccard-tag tag-b">شمسية</span><span class="ccard-icon">☀️</span><div class="ccard-title">تصميم نظام شمسي</div><div class="ccard-desc">عدد الألواح والبطاريات والعاكس لنظام معزول أو شبكي</div><div class="ccard-formula">N = E_daily / (G × η × A)</div></a>
+    <a class="ccard" data-d="wire"  href="calculators/breaker.html"><span class="ccard-tag tag-b">التركيبات</span><span class="ccard-icon">🛡️</span><div class="ccard-title">اختيار قاطع الحماية</div><div class="ccard-desc">رتبة القاطع MCB/MCCB المناسبة مع هامش الأمان</div><div class="ccard-formula">I_CB ≥ 1.25 × I_charge</div></a>
+    <a class="ccard" data-d="power" href="calculators/pfc.html"><span class="ccard-tag tag-r">الطاقة</span><span class="ccard-icon">🔄</span><div class="ccard-title">تصحيح معامل القدرة</div><div class="ccard-desc">سعة المكثف اللازمة لرفع cosφ إلى القيمة المطلوبة</div><div class="ccard-formula">Q_C = P × (tanφ₁ - tanφ₂)</div></a>
+    <a class="ccard" data-d="motor" href="calculators/motor-start.html"><span class="ccard-tag tag-b">المحركات</span><span class="ccard-icon">🌡️</span><div class="ccard-title">تيار إقلاع المحرك</div><div class="ccard-desc">تيار الإقلاع LRA وتأثيره على شبكة التغذية والقواطع</div><div class="ccard-formula">I_start ≈ 5~8 × I_nominal</div></a>
   </div>
 </section>
 
 <!-- ══ FOOTER ══ -->
-<footer>
-  <div style="display:flex;align-items:center;gap:10px;">
-    <svg width="42" height="26" viewBox="0 0 90 52" fill="none">
-      <path d="M3 5L15 45L22 45L29 5L24 5L18.5 33L14 5Z" fill="#d42b1a"/>
-      <path d="M41 5L34 27L39 27L31 45L49 21L43 21L50 5Z" fill="#8090a0"/>
-      <path d="M55 5L43 45L49 45L52 35L65 35L68 45L74 45L62 5Z M54 30L58.5 16L63 30Z" fill="#1560cc"/>
-    </svg>
+<footer class="va-footer">
+  <div class="va-footer-brand">
+    <img src="assets/icons/favicon.png" alt="Volt Ampere">
     <div>
-      <div class="foot-name"><span class="v">Volt</span> <span class="a">Ampere</span></div>
-      <div class="foot-sub">voampere.com — للمهندسين العرب</div>
+      <div class="va-footer-name"><span class="v">Volt</span> <span class="a">Ampere</span></div>
+      <div class="va-footer-sub">voampere.com — للمهندسين العرب</div>
     </div>
   </div>
-  <div class="foot-links">
-    <a href="#">الحاسبات</a><a href="#">المعايير</a><a href="#">تواصل</a><a href="#">EN</a><a href="#">FR</a>
+  <div class="va-footer-links">
+    <a href="index.html">الرئيسية</a>
+    <a href="#all">الحاسبات</a>
+    <a href="pages/about.html">عن المنصة</a>
+    <a href="pages/contact.html">تواصل</a>
+    <a href="#">EN</a>
+    <a href="#">FR</a>
   </div>
-  <div class="foot-copy">معيار IEC 60364 معتمد &copy; Volt Ampere 2025</div>
+  <div class="va-footer-copy">معيار IEC 60364 معتمد &copy; Volt Ampere 2025</div>
 </footer>
 
+<!-- Scripts -->
+<script src="js/main.js"></script>
+<script src="js/calculators.js"></script>
 <script>
-/* ── Theme ── */
-function toggleTheme(){
-  const h=document.documentElement;
-  const isDark=h.getAttribute('data-theme')==='dark';
-  h.setAttribute('data-theme', isDark?'light':'dark');
-  document.getElementById('theme-icon').textContent = isDark?'🌙':'☀️';
-  localStorage.setItem('va-theme', isDark?'light':'dark');
-}
-(function(){
-  const saved=localStorage.getItem('va-theme');
-  const prefersDark=window.matchMedia('(prefers-color-scheme:dark)').matches;
-  const theme = saved || (prefersDark?'dark':'light');
-  document.documentElement.setAttribute('data-theme',theme);
-  document.getElementById('theme-icon').textContent=theme==='dark'?'☀️':'🌙';
-})();
-
-/* ── Tabs ── */
-const panels=['ohm','wire','pow','cost'];
-function sw(name,btn,col){
-  panels.forEach(p=>document.getElementById('p-'+p).style.display=p===name?'':'none');
-  document.querySelectorAll('.tab').forEach(b=>{b.classList.remove('ar','ab');});
-  btn.classList.add(col==='r'?'ar':'ab');
-  if(name==='wire')wir();if(name==='pow')pw();if(name==='cost')cst();
-}
-
-/* ── Ohm ── */
-function ohm(c){
-  const v=parseFloat(document.getElementById('ov').value);
-  const i=parseFloat(document.getElementById('oi').value);
-  const r=parseFloat(document.getElementById('or_').value);
-  if(c!=='v'&&!isNaN(i)&&!isNaN(r))         document.getElementById('ov').value=(i*r).toFixed(2);
-  else if(c!=='i'&&!isNaN(v)&&!isNaN(r)&&r) document.getElementById('oi').value=(v/r).toFixed(3);
-  else if(c!=='r'&&!isNaN(v)&&!isNaN(i)&&i) document.getElementById('or_').value=(v/i).toFixed(2);
-  const fv=parseFloat(document.getElementById('ov').value);
-  const fi=parseFloat(document.getElementById('oi').value);
-  const fr=parseFloat(document.getElementById('or_').value);
-  document.getElementById('orv').textContent=isNaN(fv)?'—':fv.toFixed(2)+' V';
-  document.getElementById('ori').textContent=isNaN(fi)?'—':fi.toFixed(3)+' A';
-  document.getElementById('orr').textContent=isNaN(fr)?'—':fr.toFixed(2)+' Ω';
-  document.getElementById('orp').textContent=(!isNaN(fv)&&!isNaN(fi))?(fv*fi).toFixed(1)+' W':'—';
-}
-
-/* ── Wire ── */
-function wir(){
-  const I=parseFloat(document.getElementById('wi').value)||0;
-  const L=parseFloat(document.getElementById('wl').value)||1;
-  const V=parseFloat(document.getElementById('wv').value)||230;
-  const mat=document.getElementById('wm').value;
-  const sz=[1.5,2.5,4,6,10,16,25,35,50];
-  const rCu=[16,20,27,34,46,61,80,99,119],rAl=[13,16,21,27,36,48,63,78,94];
-  const rt=mat==='cu'?rCu:rAl,rho=mat==='cu'?0.01786:0.0282;
-  let s=sz[sz.length-1],cb=Math.ceil(I*1.25/5)*5;
-  for(let k=0;k<sz.length;k++){if(rt[k]>=I){s=sz[k];break;}}
-  cb=Math.ceil(I*1.25/5)*5;
-  const drop=(2*rho*L*I/s/V*100).toFixed(1);
-  document.getElementById('wrs').textContent=s+' mm²';
-  document.getElementById('wrd').textContent=drop+'%';
-  document.getElementById('wrc').textContent=cb+' A';
-  document.getElementById('wwarn').style.display=parseFloat(drop)>3?'block':'none';
-}
-
-/* ── Power ── */
-function pw(){
-  const P=parseFloat(document.getElementById('pp').value)||0;
-  const V=parseFloat(document.getElementById('pv').value)||1;
-  const cos=parseFloat(document.getElementById('pc').value)||1;
-  const t=parseInt(document.getElementById('pt').value);
-  const S=P/cos,Q=Math.sqrt(Math.max(0,S*S-P*P));
-  const I=t===3?P/(Math.sqrt(3)*V*cos):P/(V*cos);
-  document.getElementById('pri').textContent=I.toFixed(2)+' A';
-  document.getElementById('prs').textContent=Math.round(S)+' VA';
-  document.getElementById('prq').textContent=Math.round(Q)+' VAR';
-}
-
-/* ── Cost ── */
-function cst(){
-  const sel=document.getElementById('cc');
-  const isCustom=sel.value==='custom';
-  document.getElementById('custom-rate-wrap').style.display=isCustom?'block':'none';
-  const rate=isCustom?parseFloat(document.getElementById('cr').value)||0:parseFloat(sel.value);
-  const P=parseFloat(document.getElementById('cp').value)||0;
-  const H=parseFloat(document.getElementById('ch').value)||0;
-  const D=parseFloat(document.getElementById('cd').value)||0;
-  const kwh=P*H*D/1000;
-  const monthly=(kwh*rate).toFixed(2);
-  const yearly=(kwh*rate*12).toFixed(2);
-  document.getElementById('crk').textContent=kwh.toFixed(1);
-  document.getElementById('crc').textContent=monthly;
-  document.getElementById('cry').textContent=yearly;
-}
-
-/* ── Filter ── */
-function fd(d,el){
-  document.querySelectorAll('.dpill').forEach(p=>p.classList.remove('on'));
-  el.classList.add('on');
-  document.querySelectorAll('.ccard').forEach(c=>{c.style.display=(d==='all'||c.dataset.d===d)?'':'none';});
-}
-
-/* Init */
-wir();pw();cst();
+const panels = ['ohm','wire','pow','cost'];
+const sw = initTabs(panels, name => {
+  if (name === 'wire') calcWire();
+  if (name === 'pow')  calcPower();
+  if (name === 'cost') calcCost();
+});
+calcWire(); calcPower(); calcCost();
 </script>
 </body>
 </html>
