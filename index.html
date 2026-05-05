@@ -1,276 +1,950 @@
-
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>كهرباء — الحاسبات الهندسية العربية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans);background:var(--color-background-tertiary)}
+  :root {
+    --bg: #0a0d0f;
+    --surface: #111518;
+    --card: #161b1f;
+    --border: #1e2830;
+    --accent: #00d4aa;
+    --accent2: #0088ff;
+    --amber: #f5a623;
+    --text: #e8edf0;
+    --muted: #8a9ba8;
+    --faint: #2a3540;
+  }
 
-.site{max-width:900px;margin:0 auto;background:var(--color-background-primary)}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* NAV */
-nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:56px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
-.nav-logo{display:flex;align-items:center;gap:10px}
-.nav-icon{width:28px;height:28px;border-radius:6px;background:#185FA5;display:flex;align-items:center;justify-content:center}
-.nav-icon svg{width:14px;height:14px}
-.nav-brand{font-size:15px;font-weight:500;color:var(--color-text-primary);letter-spacing:-.3px}
-.nav-brand span{color:#185FA5}
-.nav-links{display:flex;gap:0}
-.nav-link{padding:6px 14px;font-size:13px;color:var(--color-text-secondary);border:none;background:none;cursor:pointer;border-radius:6px}
-.nav-link:hover{color:var(--color-text-primary);background:var(--color-background-secondary)}
-.nav-link.act{color:#185FA5}
-.nav-cta{padding:6px 16px;font-size:13px;background:#185FA5;color:#fff;border:none;border-radius:6px;cursor:pointer}
+  html { scroll-behavior: smooth; }
 
-/* HERO */
-.hero{padding:72px 32px 64px;border-bottom:0.5px solid var(--color-border-tertiary)}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#185FA5;background:#E6F1FB;padding:4px 10px;border-radius:20px;margin-bottom:20px}
-.hero-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:#185FA5}
-.hero h1{font-size:36px;font-weight:500;color:var(--color-text-primary);line-height:1.2;margin-bottom:16px;letter-spacing:-.5px}
-.hero h1 span{color:#185FA5}
-.hero p{font-size:15px;color:var(--color-text-secondary);max-width:520px;line-height:1.7;margin-bottom:32px}
-.hero-actions{display:flex;gap:10px;align-items:center;margin-bottom:48px}
-.btn-prim{padding:10px 22px;background:#185FA5;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-weight:500}
-.btn-sec{padding:10px 22px;background:transparent;color:var(--color-text-primary);border:0.5px solid var(--color-border-secondary);border-radius:8px;font-size:14px;cursor:pointer}
-.hero-stats{display:flex;gap:40px}
-.stat-item{text-align:left}
-.stat-n{font-size:22px;font-weight:500;color:var(--color-text-primary)}
-.stat-l{font-size:12px;color:var(--color-text-tertiary);margin-top:2px}
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-/* SECTION */
-.section{padding:48px 32px;border-bottom:0.5px solid var(--color-border-tertiary)}
-.sec-header{margin-bottom:28px}
-.sec-label{font-size:11px;font-weight:500;color:#185FA5;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
-.sec-title{font-size:20px;font-weight:500;color:var(--color-text-primary);letter-spacing:-.3px}
-.sec-sub{font-size:14px;color:var(--color-text-secondary);margin-top:6px;line-height:1.6}
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,170,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,170,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
 
-/* TOPIC GRID */
-.topic-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.topic-card{padding:20px;border:0.5px solid var(--color-border-tertiary);border-radius:12px;background:var(--color-background-primary);cursor:pointer;transition:border-color .15s}
-.topic-card:hover{border-color:var(--color-border-secondary)}
-.topic-ico{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
-.topic-ico svg{width:16px;height:16px}
-.topic-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
-.topic-desc{font-size:12px;color:var(--color-text-secondary);line-height:1.5}
-.topic-footer{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:0.5px solid var(--color-border-tertiary)}
-.topic-count{font-size:11px;color:var(--color-text-tertiary)}
-.topic-arrow{font-size:11px;color:#185FA5}
+  /* Nav */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,13,15,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
 
-/* CALC STRIP */
-.calc-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.calc-card{padding:16px;border:0.5px solid var(--color-border-tertiary);border-radius:10px;background:var(--color-background-primary);cursor:pointer;transition:border-color .15s}
-.calc-card:hover{border-color:#185FA5}
-.calc-ico{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
-.calc-ico svg{width:14px;height:14px}
-.calc-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
-.calc-tag{font-size:11px;color:var(--color-text-tertiary)}
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
 
-/* LESSON LIST */
-.lesson-list{display:flex;flex-direction:column;gap:0}
-.lesson-row{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:0.5px solid var(--color-border-tertiary);cursor:pointer}
-.lesson-row:last-child{border-bottom:none}
-.lesson-row:hover .lesson-title{color:#185FA5}
-.lesson-level{width:52px;flex-shrink:0}
-.level-pill{display:inline-block;font-size:10px;font-weight:500;padding:3px 8px;border-radius:20px}
-.lv-b{background:#E1F5EE;color:#085041}
-.lv-m{background:#FAEEDA;color:#633806}
-.lv-a{background:#E6F1FB;color:#0C447C}
-.lesson-title{font-size:13px;font-weight:500;color:var(--color-text-primary);transition:color .15s;flex:1}
-.lesson-meta{display:flex;align-items:center;gap:12px;flex-shrink:0}
-.lesson-time{font-size:11px;color:var(--color-text-tertiary)}
-.lesson-tag{font-size:11px;color:var(--color-text-secondary);background:var(--color-background-secondary);padding:2px 8px;border-radius:20px}
-.lesson-arr{font-size:12px;color:var(--color-text-tertiary)}
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 900;
+    color: #000;
+  }
 
-/* FOOTER */
-footer{padding:24px 32px;display:flex;align-items:center;justify-content:space-between}
-.foot-brand{font-size:13px;font-weight:500;color:var(--color-text-primary)}
-.foot-brand span{color:#185FA5}
-.foot-copy{font-size:12px;color:var(--color-text-tertiary)}
+  .logo-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.5px;
+  }
+
+  .logo-text span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    z-index: 1;
+    padding: 6rem 2rem 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,212,170,0.08);
+    border: 1px solid rgba(0,212,170,0.2);
+    border-radius: 100px;
+    padding: 4px 14px;
+    font-size: 12px;
+    color: var(--accent);
+    margin-bottom: 2rem;
+    font-weight: 500;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 .line1 { display: block; color: var(--text); }
+  .hero h1 .line2 {
+    display: block;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+    font-family: 'Tajawal', sans-serif;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-family: 'Cairo', sans-serif;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary:hover {
+    background: #00f5c4;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0,212,170,0.25);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+    font-family: 'Cairo', sans-serif;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto 4rem;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .stat-item {
+    background: var(--card);
+    padding: 1.5rem;
+    text-align: center;
+    transition: background 0.2s;
+  }
+
+  .stat-item:hover { background: var(--surface); }
+
+  .stat-num {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--accent);
+    display: block;
+    letter-spacing: -1px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    font-family: 'Tajawal', sans-serif;
+  }
+
+  /* Section */
+  section {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto 5rem;
+    padding: 0 2rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+  }
+
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .section-count {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'Tajawal', sans-serif;
+  }
+
+  /* Calculator grid */
+  .calc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .calc-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    display: block;
+  }
+
+  .calc-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .calc-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,212,170,0.1);
+  }
+
+  .calc-card:hover::before { opacity: 1; }
+
+  .card-tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    font-family: 'Tajawal', sans-serif;
+  }
+
+  .tag-green { background: rgba(0,212,170,0.12); color: var(--accent); }
+  .tag-blue { background: rgba(0,136,255,0.12); color: var(--accent2); }
+  .tag-amber { background: rgba(245,166,35,0.12); color: var(--amber); }
+  .tag-red { background: rgba(255,80,80,0.12); color: #ff5050; }
+
+  .card-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.8rem;
+    display: block;
+    line-height: 1;
+  }
+
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 300;
+  }
+
+  .card-formula {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--faint);
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    direction: ltr;
+    text-align: left;
+  }
+
+  /* Featured calculator */
+  .calc-featured {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .featured-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .featured-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Cairo', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .tab-btn.active {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+  }
+
+  .calc-inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .field label {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-family: 'Tajawal', sans-serif;
+  }
+
+  .field input, .field select {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: var(--text);
+    font-family: 'Cairo', sans-serif;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .field input:focus, .field select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,212,170,0.08);
+  }
+
+  .result-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-top: 1rem;
+  }
+
+  .result-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .result-val {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--accent);
+    display: block;
+    letter-spacing: -0.5px;
+    direction: ltr;
+  }
+
+  .result-lbl {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 3px;
+    font-family: 'Tajawal', sans-serif;
+  }
+
+  .warning-box {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: rgba(255,80,80,0.08);
+    border: 1px solid rgba(255,80,80,0.2);
+    border-radius: 8px;
+    font-size: 12px;
+    color: #ff8080;
+    font-family: 'Tajawal', sans-serif;
+    display: none;
+  }
+
+  /* Domain pills */
+  .domain-strip {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .domain-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--card);
+    font-family: 'Tajawal', sans-serif;
+  }
+
+  .domain-pill:hover, .domain-pill.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,212,170,0.06);
+  }
+
+  /* Footer */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    font-family: 'Tajawal', sans-serif;
+  }
+
+  footer span { color: var(--accent); }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero { animation: fadeUp 0.6s ease both; }
+  .stats-bar { animation: fadeUp 0.6s 0.15s ease both; }
+  section { animation: fadeUp 0.6s 0.25s ease both; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    nav { padding: 0 1rem; }
+    .nav-links { display: none; }
+    .hero { padding: 3rem 1rem 2rem; }
+    section { padding: 0 1rem; }
+    .stats-bar { margin: 0 1rem 3rem; }
+  }
+
+  /* Glow accent on hero */
+  .hero-glow {
+    position: absolute;
+    top: -100px;
+    left: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0,212,170,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
 </style>
+</head>
+<body>
 
-<div class="site">
-
+<!-- Nav -->
 <nav>
-  <div class="nav-logo">
-    <div class="nav-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-    </div>
-    <span class="nav-brand">élektra<span>.pro</span></span>
-  </div>
-  <div class="nav-links">
-    <button class="nav-link act" onclick="sendPrompt('Quels cours sont disponibles sur ce site?')">Cours</button>
-    <button class="nav-link" onclick="sendPrompt('Montre moi toutes les calculatrices disponibles')">Calculatrices</button>
-    <button class="nav-link" onclick="sendPrompt('Quels exercices pratiques sont disponibles?')">Exercices</button>
-    <button class="nav-link">Référence</button>
-  </div>
-  <button class="nav-cta" onclick="sendPrompt('Comment commencer à apprendre l\'électricité sur ce site?')">Commencer →</button>
+  <a href="#" class="logo">
+    <div class="logo-icon">⚡</div>
+    <span class="logo-text">كهرباء<span>.tn</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#calculators">الحاسبات</a></li>
+    <li><a href="#domains">المجالات</a></li>
+    <li><a href="#">المعايير</a></li>
+    <li><a href="#">تواصل</a></li>
+  </ul>
 </nav>
 
+<!-- Hero -->
 <div class="hero">
-  <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Plateforme éducative francophone</div>
-  <h1>Maîtrisez<br>l'électricité <span>par le calcul</span></h1>
-  <p>Des cours structurés, des calculatrices interactives et des exercices corrigés — du lycée jusqu'au niveau ingénieur.</p>
-  <div class="hero-actions">
-    <button class="btn-prim" onclick="sendPrompt('Par où commencer pour un débutant en électricité?')">Commencer gratuitement</button>
-    <button class="btn-sec" onclick="sendPrompt('Montre moi un exemple de cours interactif sur la loi d\'Ohm')">Voir un cours →</button>
-  </div>
-  <div class="hero-stats">
-    <div class="stat-item"><div class="stat-n">54</div><div class="stat-l">Cours interactifs</div></div>
-    <div class="stat-item"><div class="stat-n">18</div><div class="stat-l">Calculatrices</div></div>
-    <div class="stat-item"><div class="stat-n">240+</div><div class="stat-l">Exercices corrigés</div></div>
-    <div class="stat-item"><div class="stat-n">3</div><div class="stat-l">Niveaux</div></div>
-  </div>
-</div>
-
-<div class="section">
-  <div class="sec-header">
-    <div class="sec-label">Thèmes principaux</div>
-    <div class="sec-title">Tous les domaines couverts</div>
-    <div class="sec-sub">Du courant continu aux machines électriques — contenu aligné sur les programmes tunisiens et français.</div>
-  </div>
-  <div class="topic-grid">
-    <div class="topic-card" onclick="sendPrompt('Explique moi les circuits en courant continu')">
-      <div class="topic-ico" style="background:#E6F1FB">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
-      </div>
-      <div class="topic-title">Courant continu</div>
-      <div class="topic-desc">Loi d'Ohm, Kirchhoff, résistances, puissance DC</div>
-      <div class="topic-footer"><span class="topic-count">12 leçons</span><span class="topic-arrow">→</span></div>
-    </div>
-    <div class="topic-card" onclick="sendPrompt('Explique moi le courant alternatif AC')">
-      <div class="topic-ico" style="background:#E1F5EE">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2" stroke-linecap="round"><path d="M2 12Q5 4 8 12Q11 20 14 12Q17 4 20 12"/></svg>
-      </div>
-      <div class="topic-title">Courant alternatif</div>
-      <div class="topic-desc">Fréquence, déphasage, impédance, facteur de puissance</div>
-      <div class="topic-footer"><span class="topic-count">10 leçons</span><span class="topic-arrow">→</span></div>
-    </div>
-    <div class="topic-card" onclick="sendPrompt('Explique moi les transformateurs électriques')">
-      <div class="topic-ico" style="background:#FAEEDA">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="8" height="10" rx="2"/><rect x="14" y="7" width="8" height="10" rx="2"/><path d="M10 10h4M10 14h4"/></svg>
-      </div>
-      <div class="topic-title">Transformateurs</div>
-      <div class="topic-desc">Principe, rapport de transformation, pertes</div>
-      <div class="topic-footer"><span class="topic-count">8 leçons</span><span class="topic-arrow">→</span></div>
-    </div>
-    <div class="topic-card" onclick="sendPrompt('Explique moi les moteurs électriques DC et AC')">
-      <div class="topic-ico" style="background:#EEEDFE">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>
-      </div>
-      <div class="topic-title">Machines électriques</div>
-      <div class="topic-desc">Moteurs DC, AC, triphasés, couple et vitesse</div>
-      <div class="topic-footer"><span class="topic-count">11 leçons</span><span class="topic-arrow">→</span></div>
-    </div>
-    <div class="topic-card" onclick="sendPrompt('Explique moi les installations électriques et la sécurité')">
-      <div class="topic-ico" style="background:#EAF3DE">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#3B6D11" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      </div>
-      <div class="topic-title">Installations et sécurité</div>
-      <div class="topic-desc">Câblage, disjoncteurs, mise à la terre, normes</div>
-      <div class="topic-footer"><span class="topic-count">9 leçons</span><span class="topic-arrow">→</span></div>
-    </div>
-    <div class="topic-card" onclick="sendPrompt('Explique moi l\'électronique de puissance')">
-      <div class="topic-ico" style="background:#FAECE7">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#993C1D" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-      </div>
-      <div class="topic-title">Électronique de puissance</div>
-      <div class="topic-desc">Redresseurs, onduleurs, variateurs de vitesse</div>
-      <div class="topic-footer"><span class="topic-count">7 leçons</span><span class="topic-arrow">→</span></div>
-    </div>
+  <div class="hero-glow"></div>
+  <div class="hero-badge">أول منصة حسابات كهربائية عربية متخصصة</div>
+  <h1>
+    <span class="line1">الحاسبات الكهربائية</span>
+    <span class="line2">للمهندسين العرب</span>
+  </h1>
+  <p class="hero-sub">
+    أدوات تقنية دقيقة لحسابات الكهرباء اليومية — مُصممة للمهندسين والفنيين والطلاب.
+    معايير IEC وNT التونسية، بالعربية الكاملة.
+  </p>
+  <div class="hero-cta">
+    <a href="#calculators" class="btn-primary">ابدأ الحساب ↓</a>
+    <a href="#domains" class="btn-ghost">استعراض المجالات</a>
   </div>
 </div>
 
-<div class="section">
-  <div class="sec-header">
-    <div class="sec-label">Outils de calcul</div>
-    <div class="sec-title">Calculatrices interactives</div>
-    <div class="sec-sub">Entrez vos valeurs — résultats instantanés avec formules expliquées.</div>
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <span class="stat-num">٢٠+</span>
+    <span class="stat-label">حاسبة تفاعلية</span>
   </div>
-  <div class="calc-strip">
-    <div class="calc-card" onclick="sendPrompt('Ouvre la calculatrice loi d\'Ohm')">
-      <div class="calc-ico" style="background:#E6F1FB">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-      </div>
-      <div class="calc-name">Loi d'Ohm</div>
-      <div class="calc-tag">V = R × I</div>
-    </div>
-    <div class="calc-card" onclick="sendPrompt('Ouvre la calculatrice de puissance électrique')">
-      <div class="calc-ico" style="background:#E1F5EE">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>
-      </div>
-      <div class="calc-name">Puissance</div>
-      <div class="calc-tag">P, Q, S, cos φ</div>
-    </div>
-    <div class="calc-card" onclick="sendPrompt('Ouvre la calculatrice de chute de tension')">
-      <div class="calc-ico" style="background:#FAEEDA">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="2" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="22"/><polyline points="6 8 12 2 18 8"/><polyline points="6 16 12 22 18 16"/></svg>
-      </div>
-      <div class="calc-name">Chute de tension</div>
-      <div class="calc-tag">Câbles, section</div>
-    </div>
-    <div class="calc-card" onclick="sendPrompt('Ouvre la calculatrice de coût de consommation électrique')">
-      <div class="calc-ico" style="background:#EEEDFE">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
-      </div>
-      <div class="calc-name">Coût consommation</div>
-      <div class="calc-tag">kWh, tarif STEG</div>
-    </div>
+  <div class="stat-item">
+    <span class="stat-num">٨</span>
+    <span class="stat-label">مجالات كهربائية</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">IEC</span>
+    <span class="stat-label">معيار دولي معتمد</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">٢٣٠V</span>
+    <span class="stat-label">الشبكة التونسية</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">مجاني</span>
+    <span class="stat-label">بالكامل وبلا إعلانات</span>
   </div>
 </div>
 
-<div class="section" style="border-bottom:none">
-  <div class="sec-header">
-    <div class="sec-label">Dernières leçons</div>
-    <div class="sec-title">Commencer par ici</div>
+<!-- Featured Calculator -->
+<section id="calculators">
+  <div class="section-header">
+    <span class="section-title">الحاسبة الرئيسية</span>
+    <span class="section-count">جرّبها مباشرة</span>
   </div>
-  <div class="lesson-list">
-    <div class="lesson-row" onclick="sendPrompt('Explique moi la loi d\'Ohm avec des exemples et exercices corrigés')">
-      <div class="lesson-level"><span class="level-pill lv-b">Débutant</span></div>
-      <div class="lesson-title">Loi d'Ohm — de la théorie à l'application</div>
-      <div class="lesson-meta">
-        <span class="lesson-tag">Courant continu</span>
-        <span class="lesson-time">12 min</span>
-        <span class="lesson-arr">→</span>
-      </div>
-    </div>
-    <div class="lesson-row" onclick="sendPrompt('Explique moi les lois de Kirchhoff KVL et KCL avec exercices')">
-      <div class="lesson-level"><span class="level-pill lv-b">Débutant</span></div>
-      <div class="lesson-title">Lois de Kirchhoff — KVL et KCL</div>
-      <div class="lesson-meta">
-        <span class="lesson-tag">Circuits</span>
-        <span class="lesson-time">18 min</span>
-        <span class="lesson-arr">→</span>
-      </div>
-    </div>
-    <div class="lesson-row" onclick="sendPrompt('Explique moi le facteur de puissance et comment l\'améliorer')">
-      <div class="lesson-level"><span class="level-pill lv-m">Intermédiaire</span></div>
-      <div class="lesson-title">Facteur de puissance et compensation capacitive</div>
-      <div class="lesson-meta">
-        <span class="lesson-tag">Courant alternatif</span>
-        <span class="lesson-time">22 min</span>
-        <span class="lesson-arr">→</span>
-      </div>
-    </div>
-    <div class="lesson-row" onclick="sendPrompt('Explique moi les moteurs asynchrones triphasés')">
-      <div class="lesson-level"><span class="level-pill lv-a">Avancé</span></div>
-      <div class="lesson-title">Moteur asynchrone triphasé — principe et démarrage</div>
-      <div class="lesson-meta">
-        <span class="lesson-tag">Machines</span>
-        <span class="lesson-time">28 min</span>
-        <span class="lesson-arr">→</span>
-      </div>
-    </div>
-    <div class="lesson-row" onclick="sendPrompt('Explique moi comment calculer la section des câbles électriques')">
-      <div class="lesson-level"><span class="level-pill lv-m">Intermédiaire</span></div>
-      <div class="lesson-title">Dimensionnement des câbles et protection des circuits</div>
-      <div class="lesson-meta">
-        <span class="lesson-tag">Installations</span>
-        <span class="lesson-time">20 min</span>
-        <span class="lesson-arr">→</span>
-      </div>
-    </div>
-  </div>
-</div>
 
+  <div class="calc-featured">
+    <div class="featured-header">
+      <span class="featured-title">حاسبة الأسلاك والتيار</span>
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchMode('ohm',this)">قانون أوم</button>
+        <button class="tab-btn" onclick="switchMode('wire',this)">حجم السلك</button>
+        <button class="tab-btn" onclick="switchMode('power',this)">القدرة</button>
+        <button class="tab-btn" onclick="switchMode('steg',this)">تكلفة STEG</button>
+      </div>
+    </div>
+
+    <!-- Ohm -->
+    <div id="mode-ohm">
+      <div class="calc-inputs">
+        <div class="field"><label>الجهد — V (فولت)</label><input type="number" id="o-v" placeholder="—" oninput="calcOhm('v')"></div>
+        <div class="field"><label>التيار — I (أمبير)</label><input type="number" id="o-i" placeholder="—" oninput="calcOhm('i')"></div>
+        <div class="field"><label>المقاومة — R (أوم)</label><input type="number" id="o-r" placeholder="—" oninput="calcOhm('r')"></div>
+      </div>
+      <div class="result-row">
+        <div class="result-box"><span class="result-val" id="o-result-v">—</span><span class="result-lbl">جهد (V)</span></div>
+        <div class="result-box"><span class="result-val" id="o-result-i">—</span><span class="result-lbl">تيار (A)</span></div>
+        <div class="result-box"><span class="result-val" id="o-result-r">—</span><span class="result-lbl">مقاومة (Ω)</span></div>
+        <div class="result-box"><span class="result-val" id="o-result-p">—</span><span class="result-lbl">قدرة (W)</span></div>
+      </div>
+    </div>
+
+    <!-- Wire -->
+    <div id="mode-wire" style="display:none">
+      <div class="calc-inputs">
+        <div class="field"><label>التيار (A)</label><input type="number" id="w-i" value="20" oninput="calcWire()"></div>
+        <div class="field"><label>طول الدائرة (م)</label><input type="number" id="w-l" value="25" oninput="calcWire()"></div>
+        <div class="field"><label>الجهد (V)</label><input type="number" id="w-v" value="230" oninput="calcWire()"></div>
+        <div class="field">
+          <label>نوع الموصل</label>
+          <select id="w-mat" onchange="calcWire()">
+            <option value="copper">نحاس</option>
+            <option value="alum">ألمنيوم</option>
+          </select>
+        </div>
+      </div>
+      <div class="result-row">
+        <div class="result-box"><span class="result-val" id="w-size">—</span><span class="result-lbl">مقطع السلك (mm²)</span></div>
+        <div class="result-box"><span class="result-val" id="w-drop">—</span><span class="result-lbl">هبوط الجهد %</span></div>
+        <div class="result-box"><span class="result-val" id="w-cb">—</span><span class="result-lbl">قاطع حماية (A)</span></div>
+      </div>
+      <div id="w-warn" class="warning-box">⚠ هبوط الجهد يتجاوز 3% — يُنصح بزيادة مقطع السلك</div>
+    </div>
+
+    <!-- Power -->
+    <div id="mode-power" style="display:none">
+      <div class="calc-inputs">
+        <div class="field"><label>القدرة الفعالة P (W)</label><input type="number" id="p-p" value="5000" oninput="calcPow()"></div>
+        <div class="field"><label>الجهد V (فولت)</label><input type="number" id="p-v" value="230" oninput="calcPow()"></div>
+        <div class="field"><label>معامل القدرة cosφ</label><input type="number" id="p-cos" value="0.85" step="0.01" min="0.1" max="1" oninput="calcPow()"></div>
+        <div class="field">
+          <label>نوع الشبكة</label>
+          <select id="p-type" onchange="calcPow()">
+            <option value="1">أحادي الطور</option>
+            <option value="3">ثلاثي الأطوار</option>
+          </select>
+        </div>
+      </div>
+      <div class="result-row">
+        <div class="result-box"><span class="result-val" id="p-i">—</span><span class="result-lbl">التيار (A)</span></div>
+        <div class="result-box"><span class="result-val" id="p-s">—</span><span class="result-lbl">القدرة الظاهرة (VA)</span></div>
+        <div class="result-box"><span class="result-val" id="p-q">—</span><span class="result-lbl">القدرة الردّ فعلية (VAR)</span></div>
+      </div>
+    </div>
+
+    <!-- STEG -->
+    <div id="mode-steg" style="display:none">
+      <div class="calc-inputs">
+        <div class="field"><label>القدرة الكلية (W)</label><input type="number" id="s-p" value="1500" oninput="calcSteg()"></div>
+        <div class="field"><label>ساعات الاستخدام / يوم</label><input type="number" id="s-h" value="6" oninput="calcSteg()"></div>
+        <div class="field"><label>أيام / شهر</label><input type="number" id="s-d" value="30" oninput="calcSteg()"></div>
+      </div>
+      <div class="result-row">
+        <div class="result-box"><span class="result-val" id="s-kwh">—</span><span class="result-lbl">kWh / شهر</span></div>
+        <div class="result-box"><span class="result-val" id="s-cost">—</span><span class="result-lbl">التكلفة (د.ت)</span></div>
+        <div class="result-box"><span class="result-val" id="s-tier">—</span><span class="result-lbl">الشريحة الجمركية</span></div>
+      </div>
+      <p style="font-size:11px;color:var(--muted);margin-top:10px;font-family:'Tajawal',sans-serif;">* تعريفة STEG 2024: ش١ 0.082 د.ت/kWh | ش٢ 0.137 د.ت/kWh | ش٣ 0.224 د.ت/kWh</p>
+    </div>
+  </div>
+</section>
+
+<!-- Domain filter -->
+<section id="domains">
+  <div class="section-header">
+    <span class="section-title">جميع الحاسبات</span>
+    <span class="section-count">٢٠+ أداة</span>
+  </div>
+
+  <div class="domain-strip">
+    <div class="domain-pill active" onclick="filterDomain('all',this)">🔌 الكل</div>
+    <div class="domain-pill" onclick="filterDomain('basic',this)">⚡ أساسيات</div>
+    <div class="domain-pill" onclick="filterDomain('power',this)">🔋 الطاقة</div>
+    <div class="domain-pill" onclick="filterDomain('wire',this)">🔧 التركيبات</div>
+    <div class="domain-pill" onclick="filterDomain('motor',this)">⚙️ المحركات</div>
+    <div class="domain-pill" onclick="filterDomain('solar',this)">☀️ الطاقة الشمسية</div>
+  </div>
+
+  <div class="calc-grid" id="calc-grid">
+
+    <a class="calc-card" data-domain="basic" href="#">
+      <span class="card-tag tag-green">أساسيات</span>
+      <span class="card-icon">⚡</span>
+      <div class="card-title">قانون أوم</div>
+      <div class="card-desc">احسب الجهد والتيار والمقاومة والقدرة بإدخال أي قيمتين</div>
+      <div class="card-formula">V = I × R | P = V × I</div>
+    </a>
+
+    <a class="calc-card" data-domain="wire" href="#">
+      <span class="card-tag tag-blue">التركيبات</span>
+      <span class="card-icon">🔧</span>
+      <div class="card-title">حجم السلك والكابل</div>
+      <div class="card-desc">اختر المقطع المناسب وفق التيار والطول ومعيار IEC 60364</div>
+      <div class="card-formula">S = (ρ × L × I) / (ΔV × 0.5)</div>
+    </a>
+
+    <a class="calc-card" data-domain="wire" href="#">
+      <span class="card-tag tag-blue">التركيبات</span>
+      <span class="card-icon">📉</span>
+      <div class="card-title">هبوط الجهد</div>
+      <div class="card-desc">احسب نسبة هبوط الجهد في الكابلات أحادية وثلاثية الأطوار</div>
+      <div class="card-formula">ΔU% = (2×ρ×L×I) / (S×V) × 100</div>
+    </a>
+
+    <a class="calc-card" data-domain="power" href="#">
+      <span class="card-tag tag-amber">الطاقة</span>
+      <span class="card-icon">🔋</span>
+      <div class="card-title">القدرة الفعالة والظاهرة</div>
+      <div class="card-desc">احسب P وQ وS مع معامل القدرة للأحمال أحادية وثلاثية الأطوار</div>
+      <div class="card-formula">S = P / cosφ | Q = √(S²-P²)</div>
+    </a>
+
+    <a class="calc-card" data-domain="power" href="#">
+      <span class="card-tag tag-amber">الطاقة</span>
+      <span class="card-icon">💡</span>
+      <div class="card-title">تكلفة استهلاك STEG</div>
+      <div class="card-desc">احسب فاتورتك الشهرية وفق التعريفة التونسية 2024 بالشرائح الثلاث</div>
+      <div class="card-formula">Cost = kWh × tarif_tranche</div>
+    </a>
+
+    <a class="calc-card" data-domain="basic" href="#">
+      <span class="card-tag tag-green">أساسيات</span>
+      <span class="card-icon">🎨</span>
+      <div class="card-title">رمز ألوان المقاومة</div>
+      <div class="card-desc">اقرأ قيمة المقاومة من الأشرطة الملونة لمقاومات ٤ و٥ أشرطة</div>
+      <div class="card-formula">R = (d₁d₂) × 10ⁿ Ω</div>
+    </a>
+
+    <a class="calc-card" data-domain="motor" href="#">
+      <span class="card-tag tag-blue">المحركات</span>
+      <span class="card-icon">⚙️</span>
+      <div class="card-title">تيار المحرك الكهربائي</div>
+      <div class="card-desc">احسب تيار التشغيل لمحركات أحادية وثلاثية الأطوار مع معامل الكفاءة</div>
+      <div class="card-formula">I = P / (√3 × V × cosφ × η)</div>
+    </a>
+
+    <a class="calc-card" data-domain="basic" href="#">
+      <span class="card-tag tag-green">أساسيات</span>
+      <span class="card-icon">🔗</span>
+      <div class="card-title">المقاومات والمكثفات</div>
+      <div class="card-desc">احسب القيمة المكافئة للمقاومات والمكثفات على التوالي والتوازي</div>
+      <div class="card-formula">1/R = 1/R₁ + 1/R₂ + …</div>
+    </a>
+
+    <a class="calc-card" data-domain="solar" href="#">
+      <span class="card-tag tag-amber">الطاقة الشمسية</span>
+      <span class="card-icon">☀️</span>
+      <div class="card-title">تصميم نظام شمسي</div>
+      <div class="card-desc">احسب عدد الألواح والبطاريات والعاكس لنظام شمسي معزول أو متصل بالشبكة</div>
+      <div class="card-formula">N_panels = E_daily / (G × η × A)</div>
+    </a>
+
+    <a class="calc-card" data-domain="wire" href="#">
+      <span class="card-tag tag-blue">التركيبات</span>
+      <span class="card-icon">🛡️</span>
+      <div class="card-title">اختيار قاطع الحماية</div>
+      <div class="card-desc">حدد رتبة القاطع MCB/MCCB المناسبة للحمل مع هامش الأمان</div>
+      <div class="card-formula">I_CB ≥ 1.25 × I_charge</div>
+    </a>
+
+    <a class="calc-card" data-domain="power" href="#">
+      <span class="card-tag tag-amber">الطاقة</span>
+      <span class="card-icon">🔄</span>
+      <div class="card-title">تصحيح معامل القدرة</div>
+      <div class="card-desc">احسب سعة المكثف اللازمة لتحسين معامل القدرة إلى القيمة المطلوبة</div>
+      <div class="card-formula">Q_C = P × (tanφ₁ - tanφ₂)</div>
+    </a>
+
+    <a class="calc-card" data-domain="motor" href="#">
+      <span class="card-tag tag-blue">المحركات</span>
+      <span class="card-icon">🌡️</span>
+      <div class="card-title">تيار إقلاع المحرك</div>
+      <div class="card-desc">احسب تيار الإقلاع LRA وتأثيره على شبكة التغذية والقواطع</div>
+      <div class="card-formula">I_start = 5 ~ 8 × I_nominal</div>
+    </a>
+
+  </div>
+</section>
+
+<!-- Footer -->
 <footer>
-  <div class="foot-brand">élektra<span>.pro</span></div>
-  <div class="foot-copy">Plateforme éducative — Ingénierie électrique en français</div>
+  <p>صُنع بعناية من مهندس لمهندسين — <span>كهرباء.tn</span> &copy; 2025</p>
+  <p style="margin-top:6px;font-size:11px;">المعايير المعتمدة: IEC 60364 | NT 84.01 | STEG 2024</p>
 </footer>
 
-</div>
+<script>
+// Tab switching
+function switchMode(mode, btn) {
+  ['ohm','wire','power','steg'].forEach(m => {
+    document.getElementById('mode-'+m).style.display = m===mode ? '' : 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if(mode==='wire') calcWire();
+  if(mode==='power') calcPow();
+  if(mode==='steg') calcSteg();
+}
+
+// Ohm's law
+function calcOhm(changed) {
+  const v = parseFloat(document.getElementById('o-v').value);
+  const i = parseFloat(document.getElementById('o-i').value);
+  const r = parseFloat(document.getElementById('o-r').value);
+  let rv=v, ri=i, rr=r, rp=null;
+  if(!isNaN(i)&&!isNaN(r)) { rv=i*r; document.getElementById('o-v').value=rv.toFixed(2); }
+  else if(!isNaN(v)&&!isNaN(r)&&r!==0) { ri=v/r; document.getElementById('o-i').value=ri.toFixed(3); }
+  else if(!isNaN(v)&&!isNaN(i)&&i!==0) { rr=v/i; document.getElementById('o-r').value=rr.toFixed(2); }
+  const fv=parseFloat(document.getElementById('o-v').value);
+  const fi=parseFloat(document.getElementById('o-i').value);
+  const fr=parseFloat(document.getElementById('o-r').value);
+  document.getElementById('o-result-v').textContent = isNaN(fv)?'—':fv.toFixed(2)+' V';
+  document.getElementById('o-result-i').textContent = isNaN(fi)?'—':fi.toFixed(3)+' A';
+  document.getElementById('o-result-r').textContent = isNaN(fr)?'—':fr.toFixed(2)+' Ω';
+  document.getElementById('o-result-p').textContent = (!isNaN(fv)&&!isNaN(fi))?(fv*fi).toFixed(1)+' W':'—';
+}
+
+// Wire sizing
+function calcWire() {
+  const I = parseFloat(document.getElementById('w-i').value)||0;
+  const L = parseFloat(document.getElementById('w-l').value)||1;
+  const V = parseFloat(document.getElementById('w-v').value)||230;
+  const mat = document.getElementById('w-mat').value;
+  const sizes = [1.5,2.5,4,6,10,16,25,35,50];
+  const ratingsCu = [16,20,27,34,46,61,80,99,119];
+  const ratingsAl = [13,16,21,27,36,48,63,78,94];
+  const ratings = mat==='copper' ? ratingsCu : ratingsAl;
+  const rho = mat==='copper' ? 0.01786 : 0.0282;
+  let chosen = sizes[sizes.length-1];
+  let cb = ratings[ratings.length-1];
+  for(let k=0;k<sizes.length;k++) {
+    if(ratings[k]>=I) { chosen=sizes[k]; cb=Math.ceil(I*1.25/5)*5; break; }
+  }
+  const drop = (2*rho*L*I/chosen/V*100).toFixed(1);
+  document.getElementById('w-size').textContent = chosen+' mm²';
+  document.getElementById('w-drop').textContent = drop+'%';
+  document.getElementById('w-cb').textContent = cb+' A';
+  const warn = document.getElementById('w-warn');
+  warn.style.display = parseFloat(drop)>3 ? 'block' : 'none';
+}
+
+// Power
+function calcPow() {
+  const P = parseFloat(document.getElementById('p-p').value)||0;
+  const V = parseFloat(document.getElementById('p-v').value)||1;
+  const cos = parseFloat(document.getElementById('p-cos').value)||1;
+  const type = parseInt(document.getElementById('p-type').value);
+  const S = P/cos;
+  const Q = Math.sqrt(Math.max(0,S*S-P*P));
+  const I = type===3 ? P/(Math.sqrt(3)*V*cos) : P/(V*cos);
+  document.getElementById('p-i').textContent = I.toFixed(2)+' A';
+  document.getElementById('p-s').textContent = Math.round(S)+' VA';
+  document.getElementById('p-q').textContent = Math.round(Q)+' VAR';
+}
+
+// STEG
+function calcSteg() {
+  const P = parseFloat(document.getElementById('s-p').value)||0;
+  const H = parseFloat(document.getElementById('s-h').value)||0;
+  const D = parseFloat(document.getElementById('s-d').value)||0;
+  const kwh = P*H*D/1000;
+  let cost=0, tier='';
+  if(kwh<=100){ cost=kwh*0.082; tier='الشريحة ١'; }
+  else if(kwh<=300){ cost=100*0.082+(kwh-100)*0.137; tier='الشريحة ٢'; }
+  else { cost=100*0.082+200*0.137+(kwh-300)*0.224; tier='الشريحة ٣'; }
+  document.getElementById('s-kwh').textContent = kwh.toFixed(1);
+  document.getElementById('s-cost').textContent = cost.toFixed(2);
+  document.getElementById('s-tier').textContent = tier;
+}
+
+// Domain filter
+function filterDomain(d, el) {
+  document.querySelectorAll('.domain-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.calc-card').forEach(c=>{
+    c.style.display = (d==='all'||c.dataset.domain===d) ? '' : 'none';
+  });
+}
+
+// Init
+calcWire(); calcPow(); calcSteg();
+</script>
+</body>
+</html>
