@@ -1,26 +1,680 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" data-theme="light">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Volt Ampere — حاسبة</title>
-<link rel="icon" href="../assets/icons/favicon.ico">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Tajawal:wght@300;400&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="قانون أوم — حاسبة تفاعلية مع شرح كامل للقانون وتطبيقاته — Volt Ampere">
+<title>قانون أوم — Volt Ampere</title>
+<link rel="icon" type="image/x-icon" href="../assets/icons/favicon.ico">
+<link rel="icon" type="image/png"    href="../assets/icons/favicon.png" sizes="32x32">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/theme.css">
 <link rel="stylesheet" href="../css/components.css">
-<style>.page-wrap{max-width:700px;margin:4rem auto;padding:0 2rem;}</style>
+<style>
+/* ═══════════════ LAYOUT ═══════════════ */
+.page-wrap { max-width: 960px; margin: 0 auto; padding: 0 2rem 5rem; }
+
+/* Breadcrumb */
+.breadcrumb {
+  display: flex; align-items: center; gap: 8px;
+  padding: 1.5rem 0; font-size: 14px; color: var(--muted);
+  font-family: 'Tajawal', sans-serif;
+}
+.breadcrumb a { color: var(--muted); text-decoration: none; transition: color .15s; }
+.breadcrumb a:hover { color: var(--blue); }
+.breadcrumb .sep { color: var(--border); }
+
+/* Page hero */
+.page-hero {
+  display: grid; grid-template-columns: 1fr 200px;
+  gap: 2.5rem; align-items: center;
+  padding: 1.5rem 0 2.5rem;
+  border-bottom: 2px solid var(--border); margin-bottom: 3rem;
+}
+@media(max-width:620px){ .page-hero{grid-template-columns:1fr;} .hero-badge-big{display:none;} }
+
+.page-tag { margin-bottom: .8rem; }
+.page-hero h1 { font-size: clamp(2rem,4vw,2.9rem); font-weight: 900; margin-bottom: .8rem; }
+.page-sub { font-family:'Tajawal',sans-serif; font-size:1.05rem; color:var(--muted); line-height:1.85; max-width:500px; }
+
+/* Big formula badge */
+.hero-badge-big {
+  background: var(--card); border: 2px solid var(--border);
+  border-radius: 20px; padding: 1.8rem; text-align: center; box-shadow: var(--shadow);
+}
+.hbb-eq {
+  font-family: 'Amiri', serif; font-size: 3rem; font-weight: 700;
+  direction: ltr; line-height: 1.15; margin-bottom: .4rem;
+}
+.hbb-eq .ev { color: var(--red); }
+.hbb-eq .ei { color: var(--blue); }
+.hbb-eq .er { color: var(--muted); }
+.hbb-sub { font-size: 11.5px; color: var(--muted); font-family: 'Tajawal', sans-serif; letter-spacing: .5px; }
+
+/* ═══════════════ SECTION TITLES ═══════════════ */
+.sec-bar {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 1.2rem; font-weight: 800; color: var(--text);
+  margin-bottom: 1.8rem;
+}
+.sec-bar::before { content:''; width:4px; height:1.3rem; background:var(--red); border-radius:3px; flex-shrink:0; }
+
+/* ═══════════════ CALCULATOR ═══════════════ */
+.calc-wrap { margin-bottom: 3.5rem; }
+.calc-card {
+  background: var(--card); border: 1.5px solid var(--border);
+  border-radius: 20px; padding: 2rem; box-shadow: var(--shadow);
+}
+.calc-card-title {
+  font-size: 1.05rem; font-weight: 800; margin-bottom: 1.8rem;
+  display: flex; align-items: center; gap: 10px; color: var(--text);
+}
+.calc-card-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* Inputs */
+.inp-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 1.5rem; }
+@media(max-width:540px){ .inp-row{ grid-template-columns:1fr; } }
+
+.inp-block { display:flex; flex-direction:column; gap:8px; }
+.inp-lbl {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 14px; color: var(--muted); font-family:'Tajawal',sans-serif; font-weight:600;
+}
+.sym {
+  width:26px; height:26px; border-radius:7px; display:inline-flex;
+  align-items:center; justify-content:center;
+  font-family:'Amiri',serif; font-size:15px; font-weight:700;
+}
+.sym-v { background:var(--red-soft);  color:var(--red);  }
+.sym-i { background:var(--blue-soft); color:var(--blue); }
+.sym-r { background:rgba(100,120,140,.12); color:var(--muted); }
+
+.inp-wrap { position:relative; }
+.inp-wrap input {
+  width:100%; background:var(--bg); border:1.5px solid var(--border);
+  border-radius:12px; padding:13px 56px 13px 16px;
+  font-size:16px; color:var(--text); font-family:'Cairo',sans-serif;
+  outline:none; transition:border-color .18s, background .3s;
+  -moz-appearance:textfield;
+}
+.inp-wrap input::-webkit-inner-spin-button { -webkit-appearance:none; }
+.inp-wrap input:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(21,96,204,.09); }
+.inp-wrap input::placeholder { color:var(--border); font-size:14px; }
+.inp-unit {
+  position:absolute; left:14px; top:50%; transform:translateY(-50%);
+  font-size:13px; color:var(--muted); font-family:'Tajawal',sans-serif; pointer-events:none;
+}
+.inp-x {
+  position:absolute; right:10px; top:50%; transform:translateY(-50%);
+  background:none; border:none; cursor:pointer; font-size:13px;
+  color:var(--border); padding:5px; transition:color .15s; line-height:1;
+}
+.inp-x:hover { color:var(--red); }
+
+/* Results */
+.res-row { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+@media(max-width:540px){ .res-row{ grid-template-columns:repeat(2,1fr); } }
+
+.res-box {
+  background:var(--bg); border:1.5px solid var(--border);
+  border-radius:14px; padding:1.1rem 1rem; text-align:center;
+  transition:all .25s;
+}
+.res-box.lit {
+  border-color:var(--blue); background:var(--blue-soft);
+  transform:scale(1.04); box-shadow:0 4px 16px rgba(21,96,204,.14);
+}
+.rv { display:block; font-size:1.65rem; font-weight:900; letter-spacing:-.5px; direction:ltr; line-height:1.1; margin-bottom:3px; }
+.rv.c-red  { color:var(--red);  }
+.rv.c-blue { color:var(--blue); }
+.rv.c-gray { color:var(--muted);}
+.rn { font-size:13px; color:var(--muted); font-family:'Tajawal',sans-serif; }
+.ru { font-size:11.5px; color:var(--border); font-family:'Amiri',serif; margin-top:1px; }
+
+.calc-hint {
+  margin-top:1rem; text-align:center;
+  font-size:13.5px; color:var(--muted); font-family:'Tajawal',sans-serif;
+  transition:color .2s;
+}
+
+/* ═══════════════ THEORY — TRIANGLE ═══════════════ */
+.theory-wrap { margin-bottom:3.5rem; }
+.triangle-section {
+  display:flex; align-items:flex-start; gap:2.5rem; flex-wrap:wrap;
+  background:var(--card); border:1.5px solid var(--border);
+  border-radius:20px; padding:2rem; box-shadow:var(--shadow); margin-bottom:2rem;
+}
+.tri-svg-wrap { flex-shrink:0; width:200px; }
+.tri-svg-wrap svg { width:100%; height:auto; }
+.tri-legend { flex:1; min-width:220px; }
+.tri-legend h3 { font-size:1rem; font-weight:800; margin-bottom:1rem; color:var(--text); }
+.tri-row { display:flex; align-items:baseline; gap:10px; margin-bottom:.7rem; font-family:'Tajawal',sans-serif; font-size:15px; }
+.tri-sym { font-family:'Amiri',serif; font-size:1.2rem; font-weight:700; min-width:22px; }
+.tri-rule { color:var(--text); }
+.tri-rule b { font-weight:800; }
+
+/* Formula cards */
+.fcards { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px; margin-bottom:2rem; }
+.fcard {
+  background:var(--card); border:1.5px solid var(--border);
+  border-radius:16px; padding:1.5rem; box-shadow:var(--shadow);
+  transition:transform .2s, border-color .2s;
+}
+.fcard:hover { transform:translateY(-3px); border-color:var(--blue); }
+.fcard-lbl { font-size:12px; color:var(--muted); font-family:'Tajawal',sans-serif; font-weight:700; letter-spacing:.5px; margin-bottom:.6rem; }
+.fcard-eq { font-family:'Amiri',serif; font-size:2.1rem; font-weight:700; direction:ltr; margin-bottom:.5rem; }
+.fcard-txt { font-size:14px; color:var(--muted); font-family:'Tajawal',sans-serif; line-height:1.6; }
+
+/* ═══════════════ UNITS TABLE ═══════════════ */
+.table-wrap { background:var(--card); border:1.5px solid var(--border); border-radius:18px; overflow:hidden; box-shadow:var(--shadow); margin-bottom:3.5rem; }
+.va-table { width:100%; border-collapse:collapse; font-family:'Tajawal',sans-serif; }
+.va-table th {
+  background:var(--surface); color:var(--muted); font-size:13px; font-weight:700;
+  padding:12px 16px; text-align:right; border-bottom:2px solid var(--border); letter-spacing:.4px;
+}
+.va-table td { padding:13px 16px; border-bottom:1px solid var(--faint); font-size:14.5px; color:var(--text); transition:background .15s; }
+.va-table tr:last-child td { border-bottom:none; }
+.va-table tr:hover td { background:var(--surface); }
+.td-sym { font-family:'Amiri',serif; font-size:1.2rem; font-weight:700; }
+
+/* ═══════════════ EXAMPLES ═══════════════ */
+.examples-wrap { margin-bottom:3.5rem; }
+.ex-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
+.ex-card {
+  background:var(--card); border:1.5px solid var(--border);
+  border-radius:16px; padding:1.5rem; box-shadow:var(--shadow);
+  transition:transform .2s, border-color .2s;
+}
+.ex-card:hover { transform:translateY(-2px); border-color:var(--red); }
+.ex-num { display:inline-block; font-size:11.5px; font-weight:700; font-family:'Tajawal',sans-serif; color:var(--red); background:var(--red-soft); padding:2px 10px; border-radius:5px; margin-bottom:.8rem; }
+.ex-q { font-weight:800; font-size:15.5px; margin-bottom:.7rem; color:var(--text); }
+.ex-data { font-family:'Tajawal',sans-serif; font-size:14px; color:var(--muted); margin-bottom:1rem; line-height:1.7; }
+.ex-sol {
+  background:var(--surface); border-radius:10px; padding:.9rem 1rem;
+  font-family:'Amiri',serif; direction:ltr; text-align:left;
+  font-size:14.5px; color:var(--text); line-height:1.8;
+}
+.ex-ans { font-size:1.15rem; font-weight:700; color:var(--red); }
+.ex-btn {
+  display:inline-flex; align-items:center; gap:6px; margin-top:.9rem;
+  font-size:13px; font-family:'Tajawal',sans-serif; font-weight:700;
+  color:var(--blue); background:var(--blue-soft);
+  border:none; cursor:pointer; padding:6px 13px; border-radius:8px; transition:all .15s;
+}
+.ex-btn:hover { background:var(--blue); color:#fff; }
+
+/* ═══════════════ RELATED ═══════════════ */
+.related-wrap { margin-bottom:2rem; }
+.rel-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:12px; }
+.rel-card {
+  background:var(--card); border:1.5px solid var(--border); border-radius:13px;
+  padding:1rem 1.1rem; text-decoration:none; display:flex; align-items:center;
+  gap:12px; transition:all .2s; box-shadow:var(--shadow);
+}
+.rel-card:hover { border-color:var(--blue); transform:translateX(-3px); }
+.rel-icon { font-size:1.5rem; flex-shrink:0; }
+.rel-t { font-size:14.5px; font-weight:700; color:var(--text); }
+.rel-s { font-size:12.5px; color:var(--muted); font-family:'Tajawal',sans-serif; margin-top:2px; }
+
+@media(max-width:600px){
+  .page-wrap{ padding:0 1rem 4rem; }
+  .triangle-section{ flex-direction:column; }
+  .tri-svg-wrap{ width:160px; margin:0 auto; }
+}
+</style>
 </head>
 <body>
+
+<!-- NAV -->
 <nav class="va-nav z1">
   <a href="../index.html" class="va-logo">
-    <img src="../assets/icons/favicon.png" alt="VA" style="width:34px;border-radius:5px">
-    <div class="va-logo-text"><b><span class="v">Volt</span> <span class="a">Ampere</span></b><small>voampere.com</small></div>
+    <img src="../assets/icons/favicon.png" alt="Volt Ampere">
+    <div class="va-logo-text">
+      <b><span class="v">Volt</span> <span class="a">Ampere</span></b>
+      <small>voampere.com</small>
+    </div>
   </a>
-  <ul class="va-nav-links"><li><a href="../index.html">الرئيسية</a></li><li><a href="../index.html#all">الحاسبات</a></li></ul>
+  <ul class="va-nav-links">
+    <li><a href="../index.html">الرئيسية</a></li>
+    <li><a href="../index.html#all">الحاسبات</a></li>
+    <li><a href="../pages/about.html">عن المنصة</a></li>
+  </ul>
   <div class="va-nav-end">
     <span class="theme-icon" id="theme-icon">🌙</span>
     <button class="theme-btn" onclick="Theme.toggle()"></button>
   </div>
 </nav>
-<div class="page-wrap z1"><h2 style="margin-bottom:1rem">🚧 الصفحة قيد البناء</h2><p style="font-family:'Tajawal',sans-serif;color:var(--muted)">سيتم إضافة هذه الحاسبة قريباً بشرح تفصيلي للصيغة والتطبيقات.</p><br><a href="../index.html" class="btn btn-blue">← العودة للرئيسية</a></div>
+
+<div class="page-wrap z1">
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb anim-fadeup">
+    <a href="../index.html">الرئيسية</a>
+    <span class="sep">/</span>
+    <a href="../index.html#all">الحاسبات</a>
+    <span class="sep">/</span>
+    <span style="color:var(--text);font-weight:700">قانون أوم</span>
+  </div>
+
+  <!-- Page Hero -->
+  <div class="page-hero anim-fadeup">
+    <div>
+      <div class="page-tag"><span class="tag tag-r">أساسيات الكهرباء</span></div>
+      <h1>قانون <em class="text-red">أوم</em></h1>
+      <p class="page-sub">
+        القانون الأساسي الذي يربط الجهد والتيار والمقاومة في أي دائرة كهربائية.
+        أدخل أي قيمتين وستُحسب الباقيات فوراً.
+      </p>
+    </div>
+    <div class="hero-badge-big">
+      <div class="hbb-eq">
+        <span class="ev">V</span>
+        <span style="color:var(--muted)"> = </span>
+        <span class="ei">I</span>
+        <span style="color:var(--muted);font-size:2rem"> × </span>
+        <span class="er">R</span>
+      </div>
+      <div class="hbb-sub">Georg Simon Ohm — 1827</div>
+    </div>
+  </div>
+
+  <!-- ══ CALCULATOR ══ -->
+  <div class="calc-wrap anim-fadeup anim-delay1">
+    <div class="sec-bar">الحاسبة التفاعلية</div>
+    <div class="calc-card">
+      <div class="calc-card-title">⚡ أدخل أي قيمتين — ستُحسب الثالثة تلقائياً</div>
+
+      <div class="inp-row">
+        <div class="inp-block">
+          <div class="inp-lbl"><span class="sym sym-v">V</span> الجهد الكهربائي</div>
+          <div class="inp-wrap">
+            <input type="number" id="ov" placeholder="فارغ = مجهول" oninput="doOhm('v')">
+            <span class="inp-unit">فولت</span>
+            <button class="inp-x" onclick="clr('ov')" title="مسح">✕</button>
+          </div>
+        </div>
+        <div class="inp-block">
+          <div class="inp-lbl"><span class="sym sym-i">I</span> شدة التيار</div>
+          <div class="inp-wrap">
+            <input type="number" id="oi" placeholder="فارغ = مجهول" oninput="doOhm('i')">
+            <span class="inp-unit">أمبير</span>
+            <button class="inp-x" onclick="clr('oi')" title="مسح">✕</button>
+          </div>
+        </div>
+        <div class="inp-block">
+          <div class="inp-lbl"><span class="sym sym-r">R</span> المقاومة</div>
+          <div class="inp-wrap">
+            <input type="number" id="or_" placeholder="فارغ = مجهول" oninput="doOhm('r')">
+            <span class="inp-unit">أوم (Ω)</span>
+            <button class="inp-x" onclick="clr('or_')" title="مسح">✕</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="res-row">
+        <div class="res-box" id="rb-v">
+          <span class="rv c-red"  id="rv-v">—</span>
+          <div class="rn">الجهد</div>
+          <div class="ru">V (فولت)</div>
+        </div>
+        <div class="res-box" id="rb-i">
+          <span class="rv c-blue" id="rv-i">—</span>
+          <div class="rn">التيار</div>
+          <div class="ru">I (أمبير)</div>
+        </div>
+        <div class="res-box" id="rb-r">
+          <span class="rv c-gray" id="rv-r">—</span>
+          <div class="rn">المقاومة</div>
+          <div class="ru">R (أوم Ω)</div>
+        </div>
+        <div class="res-box" id="rb-p">
+          <span class="rv c-blue" id="rv-p">—</span>
+          <div class="rn">القدرة</div>
+          <div class="ru">P (واط)</div>
+        </div>
+      </div>
+      <div class="calc-hint" id="chint">أدخل قيمتين من الثلاثة — ستُحسب الباقية تلقائياً</div>
+    </div>
+  </div>
+
+  <!-- ══ THEORY ══ -->
+  <div class="theory-wrap anim-fadeup anim-delay2">
+    <div class="sec-bar">شرح القانون</div>
+
+    <!-- Triangle + legend -->
+    <div class="triangle-section">
+      <div class="tri-svg-wrap">
+        <svg viewBox="0 0 200 195" xmlns="http://www.w3.org/2000/svg">
+          <!-- Outer triangle -->
+          <polygon points="100,10 192,175 8,175"
+            fill="none" stroke="var(--border)" stroke-width="2.5" stroke-linejoin="round"/>
+          <!-- Inner dividers -->
+          <line x1="8"  y1="175" x2="192" y2="175" stroke="var(--border)" stroke-width="2"/>
+          <line x1="100" y1="100" x2="100" y2="175" stroke="var(--border)" stroke-width="2"/>
+          <!-- Top zone fill -->
+          <polygon points="100,10 192,175 100,175 8,175"
+            fill="var(--red-soft)" opacity="0.5"/>
+          <!-- Bottom-left fill -->
+          <polygon points="8,175 100,100 100,175"
+            fill="var(--blue-soft)" opacity="0.5"/>
+          <!-- Bottom-right fill -->
+          <polygon points="100,100 192,175 100,175"
+            fill="rgba(100,120,140,.07)" opacity="0.7"/>
+          <!-- Letters -->
+          <text x="100" y="82"  text-anchor="middle" font-family="serif" font-size="40" font-weight="700" fill="#d42b1a">V</text>
+          <text x="53"  y="168" text-anchor="middle" font-family="serif" font-size="35" font-weight="700" fill="#1560cc">I</text>
+          <text x="150" y="168" text-anchor="middle" font-family="serif" font-size="35" font-weight="700" fill="var(--muted)">R</text>
+          <!-- × -->
+          <text x="100" y="164" text-anchor="middle" font-family="serif" font-size="20" fill="var(--border)">×</text>
+          <!-- tip -->
+          <text x="100" y="8" text-anchor="middle" font-size="8" fill="var(--muted)" font-family="sans-serif">غطِّ ما تريد إيجاده</text>
+        </svg>
+      </div>
+
+      <div class="tri-legend">
+        <h3>كيف تستخدم مثلث أوم؟</h3>
+        <p style="font-family:'Tajawal',sans-serif;font-size:14.5px;color:var(--muted);margin-bottom:1.1rem;line-height:1.7">
+          غطِّ الكمية التي تريد إيجادها بإصبعك — ستجد العلاقة بين الكميتين المتبقيتين مباشرةً:
+        </p>
+        <div class="tri-row">
+          <span class="tri-sym" style="color:var(--red)">V</span>
+          <span class="tri-rule">غطِّ V ← <b>V = I × R</b></span>
+        </div>
+        <div class="tri-row">
+          <span class="tri-sym" style="color:var(--blue)">I</span>
+          <span class="tri-rule">غطِّ I ← <b>I = V ÷ R</b></span>
+        </div>
+        <div class="tri-row">
+          <span class="tri-sym" style="color:var(--muted)">R</span>
+          <span class="tri-rule">غطِّ R ← <b>R = V ÷ I</b></span>
+        </div>
+        <div class="tri-row" style="margin-top:.8rem;padding-top:.8rem;border-top:1px solid var(--border)">
+          <span class="tri-sym" style="color:var(--blue)">P</span>
+          <span class="tri-rule">القدرة ← <b>P = V × I</b></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 formula cards -->
+    <div class="fcards">
+      <div class="fcard">
+        <div class="fcard-lbl">احسب الجهد</div>
+        <div class="fcard-eq">
+          <span style="color:var(--red)">V</span>
+          <span style="color:var(--muted)"> = </span>
+          <span style="color:var(--blue)">I</span>
+          <span style="color:var(--muted)"> × </span>
+          <span style="color:var(--text)">R</span>
+        </div>
+        <div class="fcard-txt">اضرب شدة التيار في المقاومة للحصول على الجهد بالفولت</div>
+      </div>
+      <div class="fcard">
+        <div class="fcard-lbl">احسب التيار</div>
+        <div class="fcard-eq">
+          <span style="color:var(--blue)">I</span>
+          <span style="color:var(--muted)"> = </span>
+          <span style="color:var(--red)">V</span>
+          <span style="color:var(--muted)"> ÷ </span>
+          <span style="color:var(--text)">R</span>
+        </div>
+        <div class="fcard-txt">اقسم الجهد على المقاومة للحصول على شدة التيار بالأمبير</div>
+      </div>
+      <div class="fcard">
+        <div class="fcard-lbl">احسب المقاومة</div>
+        <div class="fcard-eq">
+          <span style="color:var(--text)">R</span>
+          <span style="color:var(--muted)"> = </span>
+          <span style="color:var(--red)">V</span>
+          <span style="color:var(--muted)"> ÷ </span>
+          <span style="color:var(--blue)">I</span>
+        </div>
+        <div class="fcard-txt">اقسم الجهد على التيار للحصول على قيمة المقاومة بالأوم</div>
+      </div>
+      <div class="fcard">
+        <div class="fcard-lbl">احسب القدرة</div>
+        <div class="fcard-eq">
+          <span style="color:var(--blue)">P</span>
+          <span style="color:var(--muted)"> = </span>
+          <span style="color:var(--red)">V</span>
+          <span style="color:var(--muted)"> × </span>
+          <span style="color:var(--blue)">I</span>
+        </div>
+        <div class="fcard-txt">اضرب الجهد في التيار للحصول على القدرة بالواط</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ UNITS TABLE ══ -->
+  <div style="margin-bottom:3.5rem">
+    <div class="sec-bar">الرموز والوحدات</div>
+    <div class="table-wrap">
+      <table class="va-table">
+        <thead>
+          <tr>
+            <th>الكمية</th>
+            <th>الرمز</th>
+            <th>الوحدة</th>
+            <th>رمز الوحدة</th>
+            <th>ملاحظة</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>الجهد الكهربائي</strong></td>
+            <td><span class="td-sym" style="color:var(--red)">V</span></td>
+            <td>فولت</td>
+            <td><strong>V</strong></td>
+            <td style="font-family:'Tajawal',sans-serif;color:var(--muted)">يُسمى أيضاً فرق الجهد أو القوة الدافعة الكهربائية EMF</td>
+          </tr>
+          <tr>
+            <td><strong>شدة التيار</strong></td>
+            <td><span class="td-sym" style="color:var(--blue)">I</span></td>
+            <td>أمبير</td>
+            <td><strong>A</strong></td>
+            <td style="font-family:'Tajawal',sans-serif;color:var(--muted)">التيار الصغير يُقاس بالمليأمبير mA &nbsp;|&nbsp; 1 A = 1000 mA</td>
+          </tr>
+          <tr>
+            <td><strong>المقاومة الكهربائية</strong></td>
+            <td><span class="td-sym">R</span></td>
+            <td>أوم</td>
+            <td><strong>Ω</strong></td>
+            <td style="font-family:'Tajawal',sans-serif;color:var(--muted)">القيم الكبيرة: كيلوأوم kΩ أو ميغاأوم MΩ</td>
+          </tr>
+          <tr>
+            <td><strong>القدرة الكهربائية</strong></td>
+            <td><span class="td-sym" style="color:var(--blue)">P</span></td>
+            <td>واط</td>
+            <td><strong>W</strong></td>
+            <td style="font-family:'Tajawal',sans-serif;color:var(--muted)">P = V×I = I²×R = V²÷R &nbsp;|&nbsp; الكيلوواط kW = 1000 W</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ EXAMPLES ══ -->
+  <div class="examples-wrap">
+    <div class="sec-bar">أمثلة محلولة</div>
+    <div class="ex-grid">
+
+      <div class="ex-card">
+        <div class="ex-num">مثال ١ — إيجاد التيار</div>
+        <div class="ex-q">دائرة مقاومة بسيطة بجهد بطارية 12V</div>
+        <div class="ex-data">
+          🔋 الجهد: <strong>12 V</strong><br>
+          🔧 المقاومة: <strong>4 Ω</strong><br>
+          ❓ المطلوب: شدة التيار I
+        </div>
+        <div class="ex-sol">
+          I = V ÷ R<br>
+          I = 12 ÷ 4<br>
+          <span class="ex-ans">I = 3 A</span>
+        </div>
+        <button class="ex-btn" onclick="applyEx(12, null, 4)">⚡ جرّب في الحاسبة</button>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-num">مثال ٢ — إيجاد الجهد</div>
+        <div class="ex-q">تحديد الجهد اللازم لتشغيل مصباح</div>
+        <div class="ex-data">
+          💡 مقاومة المصباح: <strong>220 Ω</strong><br>
+          ⚡ التيار المطلوب: <strong>0.5 A</strong><br>
+          ❓ المطلوب: الجهد V
+        </div>
+        <div class="ex-sol">
+          V = I × R<br>
+          V = 0.5 × 220<br>
+          <span class="ex-ans">V = 110 V</span>
+        </div>
+        <button class="ex-btn" onclick="applyEx(null, 0.5, 220)">⚡ جرّب في الحاسبة</button>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-num">مثال ٣ — إيجاد المقاومة</div>
+        <div class="ex-q">قياس مقاومة سخّان كهربائي بالشبكة العربية</div>
+        <div class="ex-data">
+          🔌 الجهد: <strong>230 V</strong><br>
+          ⚡ التيار المقاس: <strong>4.6 A</strong><br>
+          ❓ المطلوب: المقاومة R
+        </div>
+        <div class="ex-sol">
+          R = V ÷ I<br>
+          R = 230 ÷ 4.6<br>
+          <span class="ex-ans">R = 50 Ω</span>
+        </div>
+        <button class="ex-btn" onclick="applyEx(230, 4.6, null)">⚡ جرّب في الحاسبة</button>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-num">مثال ٤ — إيجاد القدرة</div>
+        <div class="ex-q">حساب قدرة مصباح LED في دائرة 12V</div>
+        <div class="ex-data">
+          🔋 الجهد: <strong>12 V</strong><br>
+          ⚡ التيار: <strong>0.25 A</strong><br>
+          ❓ المطلوب: القدرة P
+        </div>
+        <div class="ex-sol">
+          P = V × I<br>
+          P = 12 × 0.25<br>
+          <span class="ex-ans">P = 3 W</span>
+        </div>
+        <button class="ex-btn" onclick="applyEx(12, 0.25, null)">⚡ جرّب في الحاسبة</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ RELATED ══ -->
+  <div class="related-wrap">
+    <div class="sec-bar">حاسبات ذات صلة</div>
+    <div class="rel-grid">
+      <a href="power.html" class="rel-card">
+        <span class="rel-icon">🔋</span>
+        <div><div class="rel-t">القدرة الكهربائية</div><div class="rel-s">P, S, Q ومعامل القدرة cosφ</div></div>
+      </a>
+      <a href="wire.html" class="rel-card">
+        <span class="rel-icon">🔧</span>
+        <div><div class="rel-t">حجم السلك والكابل</div><div class="rel-s">المقطع حسب IEC 60364</div></div>
+      </a>
+      <a href="series-parallel.html" class="rel-card">
+        <span class="rel-icon">🔗</span>
+        <div><div class="rel-t">المقاومات والمكثفات</div><div class="rel-s">توالي وتوازي</div></div>
+      </a>
+      <a href="voltage-drop.html" class="rel-card">
+        <span class="rel-icon">📉</span>
+        <div><div class="rel-t">هبوط الجهد</div><div class="rel-s">نسبة الهبوط في الكابلات</div></div>
+      </a>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer class="va-footer">
+  <div class="va-footer-brand">
+    <img src="../assets/icons/favicon.png" alt="Volt Ampere">
+    <div>
+      <div class="va-footer-name"><span class="v">Volt</span> <span class="a">Ampere</span></div>
+      <div class="va-footer-sub">voampere.com — للمهندسين العرب</div>
+    </div>
+  </div>
+  <div class="va-footer-links">
+    <a href="../index.html">الرئيسية</a>
+    <a href="../index.html#all">الحاسبات</a>
+    <a href="../pages/contact.html">تواصل</a>
+  </div>
+  <div class="va-footer-copy">&copy; Volt Ampere 2025</div>
+</footer>
+
 <script src="../js/main.js"></script>
-</body></html>
+<script>
+function fmtN(n) {
+  if (isNaN(n) || !isFinite(n)) return '—';
+  const a = Math.abs(n);
+  if (a >= 1e6)  return (n/1e6).toFixed(3).replace(/\.?0+$/,'') + ' M';
+  if (a >= 1e3)  return (n/1e3).toFixed(3).replace(/\.?0+$/,'') + ' k';
+  if (a < 1e-3 && a > 0) return (n*1e3).toFixed(3).replace(/\.?0+$/,'') + ' m';
+  return parseFloat(n.toFixed(4)).toString();
+}
+
+function doOhm(changed) {
+  const v = parseFloat(document.getElementById('ov').value);
+  const i = parseFloat(document.getElementById('oi').value);
+  const r = parseFloat(document.getElementById('or_').value);
+
+  if (changed !== 'v' && !isNaN(i) && !isNaN(r))
+    document.getElementById('ov').value = (i * r).toFixed(4);
+  else if (changed !== 'i' && !isNaN(v) && !isNaN(r) && r > 0)
+    document.getElementById('oi').value = (v / r).toFixed(5);
+  else if (changed !== 'r' && !isNaN(v) && !isNaN(i) && i > 0)
+    document.getElementById('or_').value = (v / i).toFixed(4);
+
+  const fv = parseFloat(document.getElementById('ov').value);
+  const fi = parseFloat(document.getElementById('oi').value);
+  const fr = parseFloat(document.getElementById('or_').value);
+  const fp = (!isNaN(fv) && !isNaN(fi)) ? fv * fi : NaN;
+
+  document.getElementById('rv-v').textContent = isNaN(fv) ? '—' : fmtN(fv) + ' V';
+  document.getElementById('rv-i').textContent = isNaN(fi) ? '—' : fmtN(fi) + ' A';
+  document.getElementById('rv-r').textContent = isNaN(fr) ? '—' : fmtN(fr) + ' Ω';
+  document.getElementById('rv-p').textContent = isNaN(fp) ? '—' : fmtN(fp) + ' W';
+
+  // Highlight computed result
+  ['rb-v','rb-i','rb-r','rb-p'].forEach(id => document.getElementById(id).classList.remove('lit'));
+  const filled = [!isNaN(v),!isNaN(i),!isNaN(r)].filter(Boolean).length;
+  if (filled >= 2) {
+    if (changed === 'v') document.getElementById('rb-v').classList.add('lit');
+    if (changed === 'i') document.getElementById('rb-i').classList.add('lit');
+    if (changed === 'r') document.getElementById('rb-r').classList.add('lit');
+    if (!isNaN(fp))      document.getElementById('rb-p').classList.add('lit');
+  }
+
+  const hint = document.getElementById('chint');
+  if (filled >= 2) {
+    hint.style.color = 'var(--blue)'; hint.textContent = '✓ تم الحساب بنجاح';
+  } else {
+    hint.style.color = 'var(--muted)'; hint.textContent = 'أدخل قيمتين من الثلاثة — ستُحسب الباقية تلقائياً';
+  }
+}
+
+function clr(id) {
+  document.getElementById(id).value = '';
+  ['rv-v','rv-i','rv-r','rv-p'].forEach(id => document.getElementById(id).textContent = '—');
+  ['rb-v','rb-i','rb-r','rb-p'].forEach(id => document.getElementById(id).classList.remove('lit'));
+  const hint = document.getElementById('chint');
+  hint.style.color = 'var(--muted)';
+  hint.textContent = 'أدخل قيمتين من الثلاثة — ستُحسب الباقية تلقائياً';
+}
+
+function applyEx(v, i, r) {
+  document.getElementById('ov').value  = v !== null ? v  : '';
+  document.getElementById('oi').value  = i !== null ? i  : '';
+  document.getElementById('or_').value = r !== null ? r  : '';
+  const changed = v === null ? 'v' : i === null ? 'i' : 'r';
+  doOhm(changed);
+  document.querySelector('.calc-card').scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+</body>
+</html>
