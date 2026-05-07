@@ -1,26 +1,729 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" data-theme="light">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Volt Ampere — حاسبة</title>
-<link rel="icon" href="../assets/icons/favicon.ico">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Tajawal:wght@300;400&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="حاسبة حجم السلك والكابل — اختيار المقطع المناسب حسب معيار IEC 60364 — Volt Ampere">
+<title>حجم السلك والكابل — Volt Ampere</title>
+<link rel="icon" type="image/x-icon" href="../assets/icons/favicon.ico">
+<link rel="icon" type="image/png"    href="../assets/icons/favicon.png" sizes="32x32">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/theme.css">
 <link rel="stylesheet" href="../css/components.css">
-<style>.page-wrap{max-width:700px;margin:4rem auto;padding:0 2rem;}</style>
+<style>
+/* ═══════════════ LAYOUT ═══════════════ */
+.page-wrap { max-width: 980px; margin: 0 auto; padding: 0 2rem 5rem; }
+
+.breadcrumb {
+  display:flex; align-items:center; gap:8px;
+  padding:1.5rem 0; font-size:14px; color:var(--muted); font-family:'Tajawal',sans-serif;
+}
+.breadcrumb a { color:var(--muted); text-decoration:none; transition:color .15s; }
+.breadcrumb a:hover { color:var(--blue); }
+.breadcrumb .sep { color:var(--border); }
+
+/* Page hero */
+.page-hero {
+  display:grid; grid-template-columns:1fr 190px;
+  gap:2rem; align-items:center;
+  padding:1.5rem 0 2.5rem; border-bottom:2px solid var(--border); margin-bottom:3rem;
+}
+@media(max-width:620px){ .page-hero{grid-template-columns:1fr;} .hero-std{display:none;} }
+
+.page-tag { margin-bottom:.8rem; }
+.page-hero h1 { font-size:clamp(1.9rem,4vw,2.8rem); font-weight:900; margin-bottom:.8rem; }
+.page-sub { font-family:'Tajawal',sans-serif; font-size:1.05rem; color:var(--muted); line-height:1.85; max-width:500px; }
+
+/* Standard badge */
+.hero-std {
+  background:var(--card); border:2px solid var(--border);
+  border-radius:18px; padding:1.5rem; text-align:center; box-shadow:var(--shadow);
+}
+.std-logo { font-size:2rem; margin-bottom:.5rem; }
+.std-name { font-size:1rem; font-weight:800; color:var(--text); }
+.std-code { font-size:13px; color:var(--blue); font-family:'Tajawal',sans-serif; margin-top:3px; }
+.std-desc { font-size:11.5px; color:var(--muted); font-family:'Tajawal',sans-serif; margin-top:6px; line-height:1.5; }
+
+/* Sec bar */
+.sec-bar {
+  display:flex; align-items:center; gap:12px;
+  font-size:1.2rem; font-weight:800; color:var(--text); margin-bottom:1.8rem;
+}
+.sec-bar::before { content:''; width:4px; height:1.3rem; background:var(--blue); border-radius:3px; flex-shrink:0; }
+
+/* ═══════════════ CALCULATOR ═══════════════ */
+.calc-card {
+  background:var(--card); border:1.5px solid var(--border);
+  border-radius:20px; padding:2rem; box-shadow:var(--shadow); margin-bottom:3.5rem;
+}
+.calc-title {
+  font-size:1.05rem; font-weight:800; margin-bottom:1.8rem;
+  display:flex; align-items:center; gap:10px; color:var(--text);
+}
+.calc-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* Input grid */
+.inp-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-bottom:1.6rem; }
+.inp-block { display:flex; flex-direction:column; gap:7px; }
+.inp-lbl {
+  display:flex; align-items:center; gap:7px;
+  font-size:14px; color:var(--muted); font-family:'Tajawal',sans-serif; font-weight:600;
+}
+.sym {
+  width:26px; height:26px; border-radius:7px; display:inline-flex;
+  align-items:center; justify-content:center;
+  font-family:'Amiri',serif; font-size:13px; font-weight:700;
+}
+.sym-b { background:var(--blue-soft); color:var(--blue); }
+.sym-r { background:var(--red-soft);  color:var(--red);  }
+.sym-g { background:rgba(100,130,100,.12); color:#3a7a3a; }
+
+.inp-wrap { position:relative; }
+.inp-wrap input, .inp-wrap select {
+  width:100%; background:var(--bg); border:1.5px solid var(--border);
+  border-radius:12px; padding:13px 60px 13px 16px;
+  font-size:16px; color:var(--text); font-family:'Cairo',sans-serif;
+  outline:none; transition:border-color .18s, background .3s; -moz-appearance:textfield;
+}
+.inp-wrap input::-webkit-inner-spin-button { -webkit-appearance:none; }
+.inp-wrap input:focus, .inp-wrap select:focus {
+  border-color:var(--blue); box-shadow:0 0 0 3px rgba(21,96,204,.09);
+}
+.inp-unit {
+  position:absolute; left:14px; top:50%; transform:translateY(-50%);
+  font-size:13px; color:var(--muted); font-family:'Tajawal',sans-serif; pointer-events:none;
+}
+/* select has no unit overlay */
+.inp-wrap select { padding-left:16px; }
+
+/* Result cards */
+.res-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:1rem; }
+@media(max-width:500px){ .res-grid{ grid-template-columns:1fr; } }
+
+.res-box {
+  background:var(--bg); border:1.5px solid var(--border);
+  border-radius:16px; padding:1.25rem 1rem; text-align:center; transition:all .25s;
+}
+.res-box.ok  { border-color:#22a050; background:rgba(34,160,80,.07); }
+.res-box.warn { border-color:var(--red); background:var(--red-soft); }
+
+.rv { display:block; font-size:1.7rem; font-weight:900; letter-spacing:-.5px; direction:ltr; line-height:1.1; margin-bottom:4px; }
+.rv.c-blue { color:var(--blue); } .rv.c-red { color:var(--red); }
+.rv.c-green { color:#22a050; } .rv.c-amber { color:#c87000; }
+.rn { font-size:13.5px; color:var(--muted); font-family:'Tajawal',sans-serif; }
+.ru { font-size:12px; color:var(--border); font-family:'Tajawal',sans-serif; margin-top:2px; }
+
+/* Warning banner */
+.warn-banner {
+  display:none; margin-top:1rem;
+  background:var(--red-soft); border:1px solid rgba(212,43,26,.3);
+  border-radius:12px; padding:1rem 1.2rem;
+  font-family:'Tajawal',sans-serif; font-size:14px; color:var(--red); line-height:1.7;
+}
+.warn-banner.show { display:block; }
+
+/* Advice box */
+.advice-box {
+  display:none; margin-top:.8rem;
+  background:var(--blue-soft); border:1px solid rgba(21,96,204,.25);
+  border-radius:12px; padding:1rem 1.2rem;
+  font-family:'Tajawal',sans-serif; font-size:14px; color:var(--blue); line-height:1.7;
+}
+.advice-box.show { display:block; }
+
+/* ═══════════════ WIRE TABLE ═══════════════ */
+.table-section { margin-bottom:3.5rem; }
+.table-wrap { background:var(--card); border:1.5px solid var(--border); border-radius:18px; overflow:hidden; box-shadow:var(--shadow); }
+.va-table { width:100%; border-collapse:collapse; font-family:'Tajawal',sans-serif; }
+.va-table th {
+  background:var(--surface); color:var(--muted); font-size:13px; font-weight:700;
+  padding:12px 16px; text-align:right; border-bottom:2px solid var(--border);
+}
+.va-table td { padding:13px 16px; border-bottom:1px solid var(--faint); font-size:14.5px; color:var(--text); transition:background .15s; }
+.va-table tr:last-child td { border-bottom:none; }
+.va-table tr:hover td { background:var(--surface); }
+.va-table tr.highlighted td { background:var(--blue-soft)!important; font-weight:700; }
+.td-size { font-family:'Amiri',serif; font-size:1.1rem; font-weight:700; color:var(--blue); }
+.td-ok { color:#22a050; font-weight:700; }
+.td-warn { color:var(--red); font-weight:700; }
+
+/* ═══════════════ THEORY CARDS ═══════════════ */
+.theory-section { margin-bottom:3.5rem; }
+.theory-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
+.tcard {
+  background:var(--card); border:1.5px solid var(--border);
+  border-radius:16px; padding:1.5rem; box-shadow:var(--shadow);
+}
+.tcard-icon { font-size:1.8rem; margin-bottom:.75rem; }
+.tcard-title { font-size:1rem; font-weight:800; margin-bottom:.5rem; color:var(--text); }
+.tcard-body { font-size:14.5px; color:var(--muted); font-family:'Tajawal',sans-serif; line-height:1.75; }
+.tcard-formula {
+  margin-top:.9rem; padding:.75rem 1rem; border-radius:9px;
+  background:var(--surface); font-family:'Amiri',serif; font-size:14px;
+  direction:ltr; text-align:left; color:var(--blue); line-height:1.6;
+}
+
+/* ═══════════════ STEPS ═══════════════ */
+.steps-section { margin-bottom:3.5rem; }
+.steps { display:flex; flex-direction:column; gap:0; }
+.step {
+  display:flex; gap:1.5rem; align-items:flex-start;
+  background:var(--card); border:1.5px solid var(--border);
+  border-radius:16px; padding:1.4rem 1.5rem; margin-bottom:10px;
+  box-shadow:var(--shadow); transition:border-color .2s;
+}
+.step:hover { border-color:var(--blue); }
+.step-num {
+  width:36px; height:36px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:900; font-size:15px; color:#fff;
+}
+.step-num.blue { background:var(--blue); }
+.step-num.red  { background:var(--red);  }
+.step-title { font-size:15px; font-weight:800; margin-bottom:.4rem; color:var(--text); }
+.step-body { font-size:14px; color:var(--muted); font-family:'Tajawal',sans-serif; line-height:1.75; }
+
+/* ═══════════════ EXAMPLES ═══════════════ */
+.ex-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:16px; margin-bottom:3.5rem; }
+.ex-card {
+  background:var(--card); border:1.5px solid var(--border);
+  border-radius:16px; padding:1.5rem; box-shadow:var(--shadow); transition:all .2s;
+}
+.ex-card:hover { transform:translateY(-2px); border-color:var(--blue); }
+.ex-num { display:inline-block; font-size:11.5px; font-weight:700; font-family:'Tajawal',sans-serif; color:var(--blue); background:var(--blue-soft); padding:2px 10px; border-radius:5px; margin-bottom:.8rem; }
+.ex-q { font-weight:800; font-size:15.5px; margin-bottom:.7rem; color:var(--text); }
+.ex-data { font-family:'Tajawal',sans-serif; font-size:14px; color:var(--muted); margin-bottom:1rem; line-height:1.7; }
+.ex-sol { background:var(--surface); border-radius:10px; padding:.9rem 1rem; font-family:'Amiri',serif; direction:ltr; text-align:left; font-size:14.5px; color:var(--text); line-height:1.8; }
+.ex-ans { font-size:1.1rem; font-weight:700; color:var(--blue); }
+.ex-btn {
+  display:inline-flex; align-items:center; gap:6px; margin-top:.9rem;
+  font-size:13px; font-family:'Tajawal',sans-serif; font-weight:700;
+  color:var(--blue); background:var(--blue-soft);
+  border:none; cursor:pointer; padding:6px 13px; border-radius:8px; transition:all .15s;
+}
+.ex-btn:hover { background:var(--blue); color:#fff; }
+
+/* ═══════════════ RELATED ═══════════════ */
+.rel-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:12px; }
+.rel-card {
+  background:var(--card); border:1.5px solid var(--border); border-radius:13px;
+  padding:1rem 1.1rem; text-decoration:none; display:flex; align-items:center;
+  gap:12px; transition:all .2s; box-shadow:var(--shadow);
+}
+.rel-card:hover { border-color:var(--blue); transform:translateX(-3px); }
+.rel-icon { font-size:1.5rem; flex-shrink:0; }
+.rel-t { font-size:14.5px; font-weight:700; color:var(--text); }
+.rel-s { font-size:12.5px; color:var(--muted); font-family:'Tajawal',sans-serif; margin-top:2px; }
+
+@media(max-width:600px){ .page-wrap{ padding:0 1rem 4rem; } }
+</style>
 </head>
 <body>
+
+<!-- NAV -->
 <nav class="va-nav z1">
   <a href="../index.html" class="va-logo">
-    <img src="../assets/icons/favicon.png" alt="VA" style="width:34px;border-radius:5px">
-    <div class="va-logo-text"><b><span class="v">Volt</span> <span class="a">Ampere</span></b><small>voampere.com</small></div>
+    <img src="../assets/icons/favicon.png" alt="Volt Ampere">
+    <div class="va-logo-text">
+      <b><span class="v">Volt</span> <span class="a">Ampere</span></b>
+      <small>voampere.com</small>
+    </div>
   </a>
-  <ul class="va-nav-links"><li><a href="../index.html">الرئيسية</a></li><li><a href="../index.html#all">الحاسبات</a></li></ul>
+  <ul class="va-nav-links">
+    <li><a href="../index.html">الرئيسية</a></li>
+    <li><a href="../index.html#all">الحاسبات</a></li>
+    <li><a href="../pages/about.html">عن المنصة</a></li>
+  </ul>
   <div class="va-nav-end">
     <span class="theme-icon" id="theme-icon">🌙</span>
     <button class="theme-btn" onclick="Theme.toggle()"></button>
   </div>
 </nav>
-<div class="page-wrap z1"><h2 style="margin-bottom:1rem">🚧 الصفحة قيد البناء</h2><p style="font-family:'Tajawal',sans-serif;color:var(--muted)">سيتم إضافة هذه الحاسبة قريباً بشرح تفصيلي للصيغة والتطبيقات.</p><br><a href="../index.html" class="btn btn-blue">← العودة للرئيسية</a></div>
+
+<div class="page-wrap z1">
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb anim-fadeup">
+    <a href="../index.html">الرئيسية</a>
+    <span class="sep">/</span>
+    <a href="../index.html#all">الحاسبات</a>
+    <span class="sep">/</span>
+    <span style="color:var(--text);font-weight:700">حجم السلك والكابل</span>
+  </div>
+
+  <!-- Page Hero -->
+  <div class="page-hero anim-fadeup">
+    <div>
+      <div class="page-tag"><span class="tag tag-b">التركيبات الكهربائية</span></div>
+      <h1>حجم <em class="text-blue">السلك</em> والكابل</h1>
+      <p class="page-sub">
+        اختر المقطع الصحيح للموصل بناءً على التيار والطول ونوع الموصل.
+        النتائج مبنية على معيار IEC 60364 المعتمد دولياً.
+      </p>
+    </div>
+    <div class="hero-std">
+      <div class="std-logo">📋</div>
+      <div class="std-name">المعيار المعتمد</div>
+      <div class="std-code">IEC 60364</div>
+      <div class="std-desc">التركيبات الكهربائية للمباني — الإصدار الدولي</div>
+    </div>
+  </div>
+
+  <!-- ══ CALCULATOR ══ -->
+  <div class="anim-fadeup anim-delay1">
+    <div class="sec-bar">الحاسبة التفاعلية</div>
+    <div class="calc-card">
+      <div class="calc-title">🔧 أدخل بيانات الدائرة — ستظهر النتائج فوراً</div>
+
+      <div class="inp-grid">
+        <div class="inp-block">
+          <div class="inp-lbl"><span class="sym sym-b">I</span> التيار المطلوب</div>
+          <div class="inp-wrap">
+            <input type="number" id="wi" value="20" min="0.1" step="0.1" oninput="doWire()">
+            <span class="inp-unit">أمبير A</span>
+          </div>
+        </div>
+        <div class="inp-block">
+          <div class="inp-lbl"><span class="sym sym-r">L</span> طول الدائرة</div>
+          <div class="inp-wrap">
+            <input type="number" id="wl" value="25" min="1" step="1" oninput="doWire()">
+            <span class="inp-unit">متر م</span>
+          </div>
+        </div>
+        <div class="inp-block">
+          <div class="inp-lbl"><span class="sym sym-b">V</span> جهد الشبكة</div>
+          <div class="inp-wrap">
+            <input type="number" id="wv" value="230" min="100" step="1" oninput="doWire()">
+            <span class="inp-unit">فولت V</span>
+          </div>
+        </div>
+        <div class="inp-block">
+          <div class="inp-lbl"><span class="sym sym-g">M</span> نوع الموصل</div>
+          <div class="inp-wrap">
+            <select id="wm" onchange="doWire()">
+              <option value="cu">نحاس (Cu)</option>
+              <option value="al">ألمنيوم (Al)</option>
+            </select>
+          </div>
+        </div>
+        <div class="inp-block">
+          <div class="inp-lbl"><span class="sym sym-g">φ</span> نوع التركيب</div>
+          <div class="inp-wrap">
+            <select id="wph" onchange="doWire()">
+              <option value="1">أحادي الطور (1φ)</option>
+              <option value="3">ثلاثي الأطوار (3φ)</option>
+            </select>
+          </div>
+        </div>
+        <div class="inp-block">
+          <div class="inp-lbl"><span class="sym sym-r">%</span> هبوط جهد مسموح</div>
+          <div class="inp-wrap">
+            <input type="number" id="wdmax" value="3" min="1" max="10" step="0.5" oninput="doWire()">
+            <span class="inp-unit">% (IEC: 3%)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="res-grid">
+        <div class="res-box" id="rb-s">
+          <span class="rv c-blue" id="rv-s">—</span>
+          <div class="rn">المقطع المقترح</div>
+          <div class="ru">mm² (حسب IEC)</div>
+        </div>
+        <div class="res-box" id="rb-d">
+          <span class="rv c-amber" id="rv-d">—</span>
+          <div class="rn">هبوط الجهد</div>
+          <div class="ru">% من الجهد الكلي</div>
+        </div>
+        <div class="res-box" id="rb-c">
+          <span class="rv c-blue" id="rv-c">—</span>
+          <div class="rn">قاطع الحماية</div>
+          <div class="ru">أمبير (MCB)</div>
+        </div>
+      </div>
+
+      <div id="warn-banner" class="warn-banner">
+        ⚠ <strong>تحذير:</strong> هبوط الجهد يتجاوز الحد المسموح به — يُنصح بزيادة مقطع السلك درجة واحدة على الأقل.
+      </div>
+      <div id="advice-box" class="advice-box"></div>
+    </div>
+  </div>
+
+  <!-- ══ WIRE SIZING TABLE ══ -->
+  <div class="table-section anim-fadeup anim-delay2">
+    <div class="sec-bar">جدول مقاطع الأسلاك — IEC 60364</div>
+    <div class="table-wrap">
+      <table class="va-table" id="wire-table">
+        <thead>
+          <tr>
+            <th>المقطع (mm²)</th>
+            <th>سعة نحاس (A)</th>
+            <th>سعة ألمنيوم (A)</th>
+            <th>الاستخدام الشائع</th>
+            <th>التقييم</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-s="1.5">
+            <td><span class="td-size">1.5</span></td>
+            <td>16</td><td>13</td>
+            <td style="font-family:'Tajawal',sans-serif;font-size:13.5px;color:var(--muted)">الإضاءة، المقابس الخفيفة</td>
+            <td><span class="td-ok">✓ خفيف</span></td>
+          </tr>
+          <tr data-s="2.5">
+            <td><span class="td-size">2.5</span></td>
+            <td>20</td><td>16</td>
+            <td style="font-family:'Tajawal',sans-serif;font-size:13.5px;color:var(--muted)">مقابس عامة، غسالة، مكيّف صغير</td>
+            <td><span class="td-ok">✓ شائع</span></td>
+          </tr>
+          <tr data-s="4">
+            <td><span class="td-size">4</span></td>
+            <td>27</td><td>21</td>
+            <td style="font-family:'Tajawal',sans-serif;font-size:13.5px;color:var(--muted)">سخّانات، مكيّفات، فرن كهربائي</td>
+            <td><span class="td-ok">✓ متوسط</span></td>
+          </tr>
+          <tr data-s="6">
+            <td><span class="td-size">6</span></td>
+            <td>34</td><td>27</td>
+            <td style="font-family:'Tajawal',sans-serif;font-size:13.5px;color:var(--muted)">خطوط فرعية، أحمال متوسطة</td>
+            <td><span class="td-ok">✓ قوي</span></td>
+          </tr>
+          <tr data-s="10">
+            <td><span class="td-size">10</span></td>
+            <td>46</td><td>36</td>
+            <td style="font-family:'Tajawal',sans-serif;font-size:13.5px;color:var(--muted)">لوحات فرعية، محركات صغيرة</td>
+            <td><span class="td-ok">✓ متين</span></td>
+          </tr>
+          <tr data-s="16">
+            <td><span class="td-size">16</span></td>
+            <td>61</td><td>48</td>
+            <td style="font-family:'Tajawal',sans-serif;font-size:13.5px;color:var(--muted)">لوحات رئيسية، محركات متوسطة</td>
+            <td><span class="td-ok">✓ صناعي</span></td>
+          </tr>
+          <tr data-s="25">
+            <td><span class="td-size">25</span></td>
+            <td>80</td><td>63</td>
+            <td style="font-family:'Tajawal',sans-serif;font-size:13.5px;color:var(--muted)">خطوط تغذية رئيسية، مصانع</td>
+            <td><span class="td-ok">✓ ثقيل</span></td>
+          </tr>
+          <tr data-s="35">
+            <td><span class="td-size">35</span></td>
+            <td>99</td><td>78</td>
+            <td style="font-family:'Tajawal',sans-serif;font-size:13.5px;color:var(--muted)">تغذية رئيسية كبيرة، محطات</td>
+            <td><span class="td-ok">✓ ضخم</span></td>
+          </tr>
+          <tr data-s="50">
+            <td><span class="td-size">50</span></td>
+            <td>119</td><td>94</td>
+            <td style="font-family:'Tajawal',sans-serif;font-size:13.5px;color:var(--muted)">محطات توزيع، محركات كبيرة</td>
+            <td><span class="td-ok">✓ صناعي ثقيل</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:.75rem;font-family:'Tajawal',sans-serif">
+      * القيم مبنية على IEC 60364-5-52 — تركيب في قنوات مغلقة، درجة حرارة محيط 30°C.
+      تُخفَّض السعة عند درجات حرارة أعلى أو تجميع أكثر من 3 كابلات.
+    </p>
+  </div>
+
+  <!-- ══ THEORY ══ -->
+  <div class="theory-section">
+    <div class="sec-bar">كيف يتم اختيار مقطع السلك؟</div>
+    <div class="theory-grid">
+
+      <div class="tcard">
+        <div class="tcard-icon">⚡</div>
+        <div class="tcard-title">معيار الحمل الكهربائي (أمبير)</div>
+        <div class="tcard-body">يجب أن يكون مقطع السلك قادراً على حمل التيار الكامل دون تسخين خطير. السعة التيارية لكل مقطع محددة في جداول IEC.</div>
+        <div class="tcard-formula">I_cable ≥ I_load</div>
+      </div>
+
+      <div class="tcard">
+        <div class="tcard-icon">📉</div>
+        <div class="tcard-title">معيار هبوط الجهد (3%)</div>
+        <div class="tcard-body">يجب ألّا يتجاوز هبوط الجهد في السلك 3% من الجهد الاسمي وفق IEC 60364. لذلك الأسلاك الطويلة تحتاج مقطعاً أكبر.</div>
+        <div class="tcard-formula">ΔU% = (2×ρ×L×I) / (S×V) × 100</div>
+      </div>
+
+      <div class="tcard">
+        <div class="tcard-icon">🔥</div>
+        <div class="tcard-title">معيار الحماية من الحريق</div>
+        <div class="tcard-body">القاطع يجب أن يفصل قبل أن يتلف السلك بسبب التسخين. المعادلة: I_قاطع ≤ 1.45 × I_سعة السلك وفق معيار IEC.</div>
+        <div class="tcard-formula">I_CB ≤ 1.45 × I_ampacity</div>
+      </div>
+
+      <div class="tcard">
+        <div class="tcard-icon">🌡️</div>
+        <div class="tcard-title">عوامل تخفيض السعة</div>
+        <div class="tcard-body">تنخفض السعة التيارية عند: درجة حرارة محيط فوق 30°C، تجميع عدة كابلات، تركيب مدفون في الأرض أو عازل حراري.</div>
+        <div class="tcard-formula">I_corrected = I_table × Ct × Cg</div>
+      </div>
+
+      <div class="tcard">
+        <div class="tcard-icon">⚗️</div>
+        <div class="tcard-title">نحاس أم ألمنيوم؟</div>
+        <div class="tcard-body">النحاس أفضل توصيلاً وأخف وزناً بنفس المقطع، لكن الألمنيوم أرخص ثمناً. في التركيبات المنزلية يُفضَّل النحاس دائماً. الألمنيوم للخطوط الرئيسية الكبيرة.</div>
+        <div class="tcard-formula">ρ_Cu = 0.0179 | ρ_Al = 0.0282 Ω·mm²/m</div>
+      </div>
+
+      <div class="tcard">
+        <div class="tcard-icon">🛡️</div>
+        <div class="tcard-title">اختيار القاطع</div>
+        <div class="tcard-body">يُختار القاطع بتيار أكبر من تيار الحمل بهامش 25%، لكن يجب ألّا يتجاوز السعة الآمنة للسلك المستخدم لضمان الحماية الكاملة.</div>
+        <div class="tcard-formula">I_load × 1.25 ≤ I_CB ≤ I_cable</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ STEPS ══ -->
+  <div class="steps-section">
+    <div class="sec-bar">خطوات الاختيار الصحيح</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num blue">١</div>
+        <div>
+          <div class="step-title">احسب التيار الكلي للحمل</div>
+          <div class="step-body">اجمع قدرات جميع الأجهزة على الدائرة بالواط، ثم قسّم على الجهد ومعامل القدرة: <strong>I = P ÷ (V × cosφ)</strong></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num blue">٢</div>
+        <div>
+          <div class="step-title">اختر المقطع حسب جدول IEC</div>
+          <div class="step-body">ابحث في جدول السعة التيارية عن أقل مقطع تيّاره الأقصى أكبر من تيار حملك. هذا هو الحد الأدنى.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num red">٣</div>
+        <div>
+          <div class="step-title">تحقق من هبوط الجهد</div>
+          <div class="step-body">احسب هبوط الجهد بالصيغة: <strong>ΔU% = (2×ρ×L×I) / (S×V) × 100</strong>. إذا تجاوز 3% — ارفع المقطع درجة وأعد الحساب.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num blue">٤</div>
+        <div>
+          <div class="step-title">حدد رتبة القاطع</div>
+          <div class="step-body">القاطع = تيار الحمل × 1.25، مقرّباً للأعلى لأقرب رتبة قياسية (6, 10, 16, 20, 25, 32, 40, 50, 63 A…)</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num blue">٥</div>
+        <div>
+          <div class="step-title">طبّق عوامل التخفيض إن لزم</div>
+          <div class="step-body">إذا كانت درجة الحرارة فوق 30°C أو الكابلات مجمّعة — طبّق معاملات التخفيض من جداول IEC 60364-5-52 وارفع المقطع بحسب الحاجة.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ EXAMPLES ══ -->
+  <div>
+    <div class="sec-bar">أمثلة محلولة</div>
+    <div class="ex-grid">
+
+      <div class="ex-card">
+        <div class="ex-num">مثال ١ — منزلي</div>
+        <div class="ex-q">دائرة سخّان ماء كهربائي</div>
+        <div class="ex-data">
+          🔌 الجهد: <strong>230 V</strong><br>
+          ⚡ التيار: <strong>16 A</strong><br>
+          📏 الطول: <strong>15 م</strong> — نحاس
+        </div>
+        <div class="ex-sol">
+          جدول IEC → 2.5 mm² (20A)<br>
+          ΔU = (2×0.0179×15×16)/(2.5×230)<br>
+          ΔU = <span class="ex-ans">1.49% ✓</span>
+        </div>
+        <button class="ex-btn" onclick="applyEx(16,15,230,'cu','1',3)">🔧 جرّب في الحاسبة</button>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-num">مثال ٢ — تجاري</div>
+        <div class="ex-q">دائرة مكيّف مركزي 5 طن</div>
+        <div class="ex-data">
+          🔌 الجهد: <strong>400 V ثلاثي</strong><br>
+          ⚡ التيار: <strong>28 A</strong><br>
+          📏 الطول: <strong>40 م</strong> — نحاس
+        </div>
+        <div class="ex-sol">
+          جدول IEC → 6 mm² (34A)<br>
+          ΔU = (√3×0.0179×40×28)/(6×400)<br>
+          ΔU = <span class="ex-ans">1.82% ✓</span>
+        </div>
+        <button class="ex-btn" onclick="applyEx(28,40,400,'cu','3',3)">🔧 جرّب في الحاسبة</button>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-num">مثال ٣ — مسافة طويلة</div>
+        <div class="ex-q">إضاءة حديقة بعيدة (50م)</div>
+        <div class="ex-data">
+          🔌 الجهد: <strong>230 V</strong><br>
+          ⚡ التيار: <strong>8 A</strong><br>
+          📏 الطول: <strong>50 م</strong> — نحاس
+        </div>
+        <div class="ex-sol">
+          جدول IEC → 1.5 mm² (16A)<br>
+          ΔU(1.5) = 3.73% ✗ تجاوز 3%<br>
+          ارفع → 2.5 mm²:<br>
+          ΔU = <span class="ex-ans">2.24% ✓</span>
+        </div>
+        <button class="ex-btn" onclick="applyEx(8,50,230,'cu','1',3)">🔧 جرّب في الحاسبة</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ RELATED ══ -->
+  <div>
+    <div class="sec-bar">حاسبات ذات صلة</div>
+    <div class="rel-grid">
+      <a href="voltage-drop.html" class="rel-card">
+        <span class="rel-icon">📉</span>
+        <div><div class="rel-t">هبوط الجهد</div><div class="rel-s">حساب مفصّل للهبوط</div></div>
+      </a>
+      <a href="breaker.html" class="rel-card">
+        <span class="rel-icon">🛡️</span>
+        <div><div class="rel-t">قاطع الحماية</div><div class="rel-s">MCB / MCCB</div></div>
+      </a>
+      <a href="power.html" class="rel-card">
+        <span class="rel-icon">🔋</span>
+        <div><div class="rel-t">القدرة والتيار</div><div class="rel-s">حساب تيار الحمل</div></div>
+      </a>
+      <a href="ohm.html" class="rel-card">
+        <span class="rel-icon">⚡</span>
+        <div><div class="rel-t">قانون أوم</div><div class="rel-s">V = I × R</div></div>
+      </a>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer class="va-footer">
+  <div class="va-footer-brand">
+    <img src="../assets/icons/favicon.png" alt="Volt Ampere">
+    <div>
+      <div class="va-footer-name"><span class="v">Volt</span> <span class="a">Ampere</span></div>
+      <div class="va-footer-sub">voampere.com — للمهندسين العرب</div>
+    </div>
+  </div>
+  <div class="va-footer-links">
+    <a href="../index.html">الرئيسية</a>
+    <a href="../index.html#all">الحاسبات</a>
+    <a href="../pages/contact.html">تواصل</a>
+  </div>
+  <div class="va-footer-copy">&copy; Volt Ampere 2025 — IEC 60364</div>
+</footer>
+
 <script src="../js/main.js"></script>
-</body></html>
+<script>
+/* ── Wire data ── */
+const SIZES   = [1.5, 2.5, 4, 6, 10, 16, 25, 35, 50];
+const AMP_CU  = [16,  20,  27, 34, 46, 61, 80, 99, 119];
+const AMP_AL  = [13,  16,  21, 27, 36, 48, 63, 78,  94];
+const RHO_CU  = 0.01786;
+const RHO_AL  = 0.02800;
+
+const CB_STD  = [6,10,16,20,25,32,40,50,63,80,100,125,160,200,250];
+
+function nextCB(i) {
+  for (const c of CB_STD) if (c >= i) return c;
+  return Math.ceil(i / 10) * 10;
+}
+
+function doWire() {
+  const I    = parseFloat(document.getElementById('wi').value)    || 0;
+  const L    = parseFloat(document.getElementById('wl').value)    || 1;
+  const V    = parseFloat(document.getElementById('wv').value)    || 230;
+  const mat  = document.getElementById('wm').value;
+  const ph   = parseInt(document.getElementById('wph').value);
+  const dmax = parseFloat(document.getElementById('wdmax').value) || 3;
+
+  const amp = mat === 'cu' ? AMP_CU : AMP_AL;
+  const rho = mat === 'cu' ? RHO_CU : RHO_AL;
+  const matLabel = mat === 'cu' ? 'نحاس' : 'ألمنيوم';
+
+  /* 1. Choose section by ampacity */
+  let si = SIZES.length - 1;
+  for (let k = 0; k < SIZES.length; k++) { if (amp[k] >= I) { si = k; break; } }
+
+  /* 2. Check voltage drop — upgrade if needed */
+  const factor = ph === 3 ? Math.sqrt(3) : 2;
+  let drop = (factor * rho * L * I) / (SIZES[si] * V) * 100;
+
+  if (drop > dmax && si < SIZES.length - 1) {
+    // Try upgrading until drop ≤ dmax
+    for (let k = si + 1; k < SIZES.length; k++) {
+      drop = (factor * rho * L * I) / (SIZES[k] * V) * 100;
+      if (drop <= dmax) { si = k; break; }
+      si = k; // take largest if still over
+    }
+  }
+
+  const S  = SIZES[si];
+  const cb = nextCB(I * 1.25);
+  drop = (factor * rho * L * I) / (S * V) * 100;
+
+  /* ── Update results ── */
+  document.getElementById('rv-s').textContent = S + ' mm²';
+  document.getElementById('rv-d').textContent = drop.toFixed(2) + ' %';
+  document.getElementById('rv-c').textContent = cb + ' A';
+
+  /* Drop colour */
+  const rdv = document.getElementById('rv-d');
+  const rbd = document.getElementById('rb-d');
+  if (drop > dmax) {
+    rdv.className = 'rv c-red';
+    rbd.classList.add('warn'); rbd.classList.remove('ok');
+  } else if (drop > dmax * 0.8) {
+    rdv.className = 'rv c-amber';
+    rbd.classList.remove('warn','ok');
+  } else {
+    rdv.className = 'rv c-green';
+    rbd.classList.add('ok'); rbd.classList.remove('warn');
+  }
+
+  /* Warning banner */
+  const wb = document.getElementById('warn-banner');
+  wb.classList.toggle('warn-banner', true);
+  wb.classList.toggle('show', drop > dmax);
+
+  /* Advice box */
+  const ab = document.getElementById('advice-box');
+  let advice = '';
+  if (I > 0) {
+    advice = `✅ <strong>الاقتراح:</strong> استخدم كابل ${matLabel} ${S} mm² مع قاطع ${cb} A. `;
+    if (ph === 3) advice += 'شبكة ثلاثية الأطوار — المعامل √3.';
+    else          advice += 'شبكة أحادية الطور — معامل 2 (ذهاب وإياب).';
+    if (drop <= dmax) advice += ` هبوط الجهد ${drop.toFixed(2)}% ضمن الحد المسموح (${dmax}%) ✓`;
+  }
+  ab.innerHTML = advice;
+  ab.classList.toggle('show', I > 0);
+
+  /* Highlight table row */
+  document.querySelectorAll('#wire-table tbody tr').forEach(tr => {
+    tr.classList.toggle('highlighted', parseFloat(tr.dataset.s) === S);
+  });
+}
+
+function applyEx(i, l, v, mat, ph, dmax) {
+  document.getElementById('wi').value    = i;
+  document.getElementById('wl').value    = l;
+  document.getElementById('wv').value    = v;
+  document.getElementById('wm').value    = mat;
+  document.getElementById('wph').value   = ph;
+  document.getElementById('wdmax').value = dmax;
+  doWire();
+  document.querySelector('.calc-card').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+/* Init */
+doWire();
+</script>
+</body>
+</html>
