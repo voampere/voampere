@@ -1,26 +1,118 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" data-theme="light">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Volt Ampere — حاسبة</title>
-<link rel="icon" href="../assets/icons/favicon.ico">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Tajawal:wght@300;400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/theme.css">
-<link rel="stylesheet" href="../css/components.css">
-<style>.page-wrap{max-width:700px;margin:4rem auto;padding:0 2rem;}</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>طرق تشغيل المحركات — Volt Ampere</title>
+<link rel="icon"             type="image/x-icon" href="/assets/icons/favicon.ico">
+<link rel="icon"             type="image/png"    href="/assets/icons/favicon.png" sizes="32x32">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/theme.css">
+<link rel="stylesheet" href="/css/components.css">
+<style>
+.page-wrap { max-width: 960px; margin: 0 auto; padding: 0 2rem 5rem; }
+.breadcrumb { display: flex; align-items: center; gap: 8px; padding: 1.5rem 0; font-size: 14px; color: var(--muted); font-family: 'Tajawal', sans-serif; }
+.breadcrumb a { color: var(--muted); text-decoration: none; transition: color .15s; }
+.breadcrumb a:hover { color: var(--blue); }
+.breadcrumb .sep { color: var(--border); }
+.page-hero { padding: 1.5rem 0 2.5rem; border-bottom: 2px solid var(--border); margin-bottom: 3rem; }
+.page-hero h1 { font-size: clamp(2rem,4vw,2.9rem); font-weight: 900; margin-bottom: .8rem; }
+.page-sub { font-family:'Tajawal',sans-serif; color:var(--muted); line-height:1.85; max-width:600px; }
+.calc-card { background: var(--card); border: 1.5px solid var(--border); border-radius: 20px; padding: 2rem; box-shadow: var(--shadow); margin-bottom: 2.5rem; }
+.compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 2rem; }
+.method-card { background: var(--bg); border: 1.5px solid var(--border); border-radius: 16px; padding: 1.5rem; }
+.m-title { font-weight: 800; font-size: 1.2rem; margin-bottom: 12px; display: block; }
+.m-stat { font-size: 14px; color: var(--muted); font-family: 'Tajawal', sans-serif; margin-bottom: 8px; display: flex; justify-content: space-between; }
+.m-stat b { color: var(--text); }
+.progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-top: 5px; }
+.progress-fill { height: 100%; background: var(--blue); transition: width .4s; }
+.progress-fill.red { background: var(--red); }
+</style>
 </head>
 <body>
+
 <nav class="va-nav z1">
-  <a href="../index.html" class="va-logo">
-    <img src="../assets/icons/favicon.png" alt="VA" style="width:34px;border-radius:5px">
+  <a href="/index.html" class="va-logo">
+    <div class="va-logo-box"><span class="v">V</span><span class="a">A</span></div>
     <div class="va-logo-text"><b><span class="v">Volt</span> <span class="a">Ampere</span></b><small>voampere.com</small></div>
   </a>
-  <ul class="va-nav-links"><li><a href="../index.html">الرئيسية</a></li><li><a href="../index.html#all">الحاسبات</a></li></ul>
+  <ul class="va-nav-links">
+    <li><a href="/index.html">الرئيسية</a></li>
+    <li><a href="/index.html#all">الحاسبات</a></li>
+    <li><a href="/pages/about.html">عن المنصة</a></li>
+  </ul>
   <div class="va-nav-end">
     <span class="theme-icon" id="theme-icon">🌙</span>
     <button class="theme-btn" onclick="Theme.toggle()"></button>
+    <a href="/pages/about.html" class="va-badge">دليل المنصة</a>
   </div>
 </nav>
-<div class="page-wrap z1"><h2 style="margin-bottom:1rem">🚧 الصفحة قيد البناء</h2><p style="font-family:'Tajawal',sans-serif;color:var(--muted)">سيتم إضافة هذه الحاسبة قريباً بشرح تفصيلي للصيغة والتطبيقات.</p><br><a href="../index.html" class="btn btn-blue">← العودة للرئيسية</a></div>
-<script src="../js/main.js"></script>
-</body></html>
+
+<div class="page-wrap z1">
+  <div class="breadcrumb anim-fadeup">
+    <a href="/index.html">الرئيسية</a><span class="sep">/</span>
+    <a href="/index.html#all">الحاسبات</a><span class="sep">/</span>
+    <span style="color:var(--text);font-weight:700">طرق التشغيل</span>
+  </div>
+
+  <div class="page-hero anim-fadeup">
+    <div class="page-tag"><span class="tag tag-r">قوى وتحكم</span></div>
+    <h1>مقارنة طرق <em class="text-blue">التشغيل</em></h1>
+    <p class="page-sub">قارن بين تيار البدء وعزم الدوران لمختلف طرق تشغيل المحركات الحثية (DOL, Star-Delta, Soft Starter).</p>
+  </div>
+
+  <div class="calc-card anim-fadeup anim-delay1">
+    <div style="max-width:300px">
+       <label style="font-size:14px;color:var(--muted)">تيار الحمل الكامل (FLC - Ampere)</label>
+       <input type="number" id="mflc" value="20" oninput="runCalc()">
+    </div>
+
+    <div class="compare-grid">
+      <!-- DOL -->
+      <div class="method-card">
+        <span class="m-title text-red">التشغيل المباشر (DOL)</span>
+        <div class="m-stat"><span>تيار البدء (Starting I):</span> <b id="dol-i">0 A</b></div>
+        <div class="progress-bar"><div class="progress-fill red" style="width:100%"></div></div>
+        <div class="m-stat" style="margin-top:10px"><span>عزم البدء (Starting T):</span> <b>100%</b></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+      </div>
+      <!-- Star-Delta -->
+      <div class="method-card">
+        <span class="m-title text-blue">نجمة - دلتا (Star-Delta)</span>
+        <div class="m-stat"><span>تيار البدء (Starting I):</span> <b id="sd-i">0 A</b></div>
+        <div class="progress-bar"><div class="progress-fill red" style="width:33.3%"></div></div>
+        <div class="m-stat" style="margin-top:10px"><span>عزم البدء (Starting T):</span> <b>33.3%</b></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:33.3%"></div></div>
+      </div>
+      <!-- Soft Starter -->
+      <div class="method-card">
+        <span class="m-title text-blue">المشغل الناعم (Soft Starter)</span>
+        <div class="m-stat"><span>تيار البدء (Starting I):</span> <b id="ss-i">0 A</b></div>
+        <div class="progress-bar"><div class="progress-fill red" style="width:45%"></div></div>
+        <div class="m-stat" style="margin-top:10px"><span>عزم البدء (Starting T):</span> <b>قابل للضبط</b></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="va-footer">
+  <div class="va-footer-brand"><div class="va-logo-box"><span class="v">V</span><span class="a">A</span></div><div><div class="va-footer-name"><span class="v">Volt</span> <span class="a">Ampere</span></div><div class="va-footer-sub">voampere.com — للمهندسين العرب</div></div></div>
+  <div class="va-footer-links"><a href="/index.html">الرئيسية</a><a href="/index.html#all">الحاسبات</a><a href="/pages/contact.html">تواصل</a></div>
+  <div class="va-footer-copy">&copy; Volt Ampere 2025</div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script>
+function runCalc() {
+  const FLC = VA.val('mflc');
+  
+  VA.set('dol-i', (FLC * 6).toFixed(1) + ' A (6x)');
+  VA.set('sd-i', (FLC * 2).toFixed(1) + ' A (2x)');
+  VA.set('ss-i', (FLC * 3).toFixed(1) + ' A (3x avg)');
+}
+document.addEventListener('DOMContentLoaded', runCalc);
+</script>
+</body>
+</html>

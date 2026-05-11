@@ -11,17 +11,17 @@
 <title>Volt Ampere — الحاسبات الكهربائية للمهندسين العرب</title>
 
 <!-- Favicon -->
-<link rel="icon"             type="image/x-icon" href="assets/icons/favicon.ico">
-<link rel="icon"             type="image/png"    href="assets/icons/favicon.png" sizes="32x32">
-<link rel="apple-touch-icon"                     href="assets/images/logo.png">
+<link rel="icon"             type="image/x-icon" href="/assets/icons/favicon.ico">
+<link rel="icon"             type="image/png"    href="/assets/icons/favicon.png" sizes="32x32">
+<link rel="apple-touch-icon"                     href="/assets/images/logo.png">
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 <!-- Styles -->
-<link rel="stylesheet" href="css/theme.css">
-<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="/css/theme.css">
+<link rel="stylesheet" href="/css/components.css">
 
 <style>
 /* ── Page-specific styles ── */
@@ -32,7 +32,7 @@
 .sec-count { font-size:12px;color:var(--muted);font-family:'Tajawal',sans-serif; }
 
 /* Hero */
-.hero { max-width:1120px;margin:0 auto;padding:5.5rem 2rem 3.5rem;display:grid;grid-template-columns:1fr 360px;gap:4rem;align-items:center; }
+.hero { max-width:1120px;margin:0 auto;padding:6.5rem 2rem 4rem;display:grid;grid-template-columns:1fr 360px;gap:4rem;align-items:center; }
 @media(max-width:860px){.hero{grid-template-columns:1fr;padding:3rem 1.2rem 2rem;}.hero-visual{display:none;}}
 .hero-label { display:inline-flex;align-items:center;gap:7px;background:var(--blue-soft);border:1px solid rgba(21,96,204,.25);border-radius:100px;padding:4px 14px;font-size:12px;color:var(--blue);font-weight:700;margin-bottom:1.6rem; }
 .hero-label::before{content:'';width:6px;height:6px;background:var(--blue);border-radius:50%;animation:blink 2s ease-in-out infinite;}
@@ -42,7 +42,7 @@
 /* VA animated icon */
 .hero-visual{display:flex;align-items:center;justify-content:center;position:relative;}
 .va-big{font-size:8rem;font-weight:900;letter-spacing:-6px;line-height:1;user-select:none;position:relative;z-index:2;animation:floatY 4s ease-in-out infinite;}
-.va-big .v{color:var(--red);}.va-big .bolt{color:var(--muted);font-size:4.5rem;vertical-align:middle;position:relative;top:-4px;}.va-big .a{color:var(--blue);}
+.va-big .v{color:var(--red);text-shadow: 0 0 20px rgba(212,43,26,0.15);}.va-big .bolt{color:var(--muted);font-size:4.5rem;vertical-align:middle;position:relative;top:-4px;}.va-big .a{color:var(--blue);text-shadow: 0 0 20px rgba(21,96,204,0.15);}
 .va-ring{position:absolute;width:240px;height:240px;border-radius:50%;border:1.5px solid rgba(21,96,204,.15);animation:spin 18s linear infinite;}
 .va-ring2{position:absolute;width:180px;height:180px;border-radius:50%;border:1.5px solid rgba(212,43,26,.12);animation:spin 12s linear infinite reverse;}
 
@@ -94,8 +94,10 @@
 
 <!-- ══ NAV ══ -->
 <nav class="va-nav z1">
-  <a href="index.html" class="va-logo">
-    <img src="assets/icons/favicon.png" alt="Volt Ampere">
+  <a href="/index.html" class="va-logo">
+    <div class="va-logo-box">
+      <span class="v">V</span><span class="a">A</span>
+    </div>
     <div class="va-logo-text">
       <b><span class="v">Volt</span> <span class="a">Ampere</span></b>
       <small>voampere.com</small>
@@ -103,16 +105,16 @@
   </a>
 
   <ul class="va-nav-links">
-    <li><a href="index.html"              class="active">الرئيسية</a></li>
+    <li><a href="/index.html"              class="active">الرئيسية</a></li>
     <li><a href="#all">الحاسبات</a></li>
-    <li><a href="pages/about.html">عن المنصة</a></li>
-    <li><a href="pages/contact.html">تواصل</a></li>
+    <li><a href="/pages/about.html">عن المنصة</a></li>
+    <li><a href="/pages/contact.html">تواصل</a></li>
   </ul>
 
   <div class="va-nav-end">
     <span class="theme-icon" id="theme-icon">🌙</span>
     <button class="theme-btn" onclick="Theme.toggle()" title="تبديل الوضع"></button>
-    <span class="va-badge">قريباً</span>
+    <a href="/pages/about.html" class="va-badge">دليل المنصة</a>
   </div>
 </nav>
 
@@ -125,7 +127,7 @@
     <div class="hero-actions">
       <a href="#calc" class="btn btn-red">ابدأ الحساب ⚡</a>
       <a href="#all"  class="btn btn-blue">كل الحاسبات</a>
-      <a href="pages/about.html" class="btn btn-ghost">عن المنصة</a>
+      <a href="/pages/about.html" class="btn btn-ghost">عن المنصة</a>
     </div>
   </div>
   <div class="hero-visual">
@@ -284,19 +286,19 @@
 <!-- ══ FOOTER ══ -->
 <footer class="va-footer">
   <div class="va-footer-brand">
-    <img src="assets/icons/favicon.png" alt="Volt Ampere">
+    <div class="va-logo-box">
+      <span class="v">V</span><span class="a">A</span>
+    </div>
     <div>
       <div class="va-footer-name"><span class="v">Volt</span> <span class="a">Ampere</span></div>
       <div class="va-footer-sub">voampere.com — للمهندسين العرب</div>
     </div>
   </div>
   <div class="va-footer-links">
-    <a href="index.html">الرئيسية</a>
+    <a href="/index.html">الرئيسية</a>
     <a href="#all">الحاسبات</a>
-    <a href="pages/about.html">عن المنصة</a>
-    <a href="pages/contact.html">تواصل</a>
-    <a href="#">EN</a>
-    <a href="#">FR</a>
+    <a href="/pages/about.html">عن المنصة</a>
+    <a href="/pages/contact.html">تواصل</a>
   </div>
   <div class="va-footer-copy">معيار IEC 60364 معتمد &copy; Volt Ampere 2025</div>
 </footer>

@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="حاسبة حجم السلك والكابل — اختيار المقطع المناسب حسب معيار IEC 60364 — Volt Ampere">
 <title>حجم السلك والكابل — Volt Ampere</title>
-<link rel="icon" type="image/x-icon" href="../assets/icons/favicon.ico">
-<link rel="icon" type="image/png"    href="../assets/icons/favicon.png" sizes="32x32">
+<link rel="icon"             type="image/x-icon" href="/assets/icons/favicon.ico">
+<link rel="icon"             type="image/png"    href="/assets/icons/favicon.png" sizes="32x32">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/theme.css">
-<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="/css/theme.css">
+<link rel="stylesheet" href="/css/components.css">
 <style>
 /* ═══════════════ LAYOUT ═══════════════ */
 .page-wrap { max-width: 980px; margin: 0 auto; padding: 0 2rem 5rem; }
@@ -223,21 +223,22 @@
 
 <!-- NAV -->
 <nav class="va-nav z1">
-  <a href="../index.html" class="va-logo">
-    <img src="../assets/icons/favicon.png" alt="Volt Ampere">
+  <a href="/index.html" class="va-logo">
+    <div class="va-logo-box"><span class="v">V</span><span class="a">A</span></div>
     <div class="va-logo-text">
       <b><span class="v">Volt</span> <span class="a">Ampere</span></b>
       <small>voampere.com</small>
     </div>
   </a>
   <ul class="va-nav-links">
-    <li><a href="../index.html">الرئيسية</a></li>
-    <li><a href="../index.html#all">الحاسبات</a></li>
-    <li><a href="../pages/about.html">عن المنصة</a></li>
+    <li><a href="/index.html">الرئيسية</a></li>
+    <li><a href="/index.html#all">الحاسبات</a></li>
+    <li><a href="/pages/about.html">عن المنصة</a></li>
   </ul>
   <div class="va-nav-end">
     <span class="theme-icon" id="theme-icon">🌙</span>
     <button class="theme-btn" onclick="Theme.toggle()"></button>
+    <a href="/pages/about.html" class="va-badge">دليل المنصة</a>
   </div>
 </nav>
 
@@ -245,9 +246,9 @@
 
   <!-- Breadcrumb -->
   <div class="breadcrumb anim-fadeup">
-    <a href="../index.html">الرئيسية</a>
+    <a href="/index.html">الرئيسية</a>
     <span class="sep">/</span>
-    <a href="../index.html#all">الحاسبات</a>
+    <a href="/index.html#all">الحاسبات</a>
     <span class="sep">/</span>
     <span style="color:var(--text);font-weight:700">حجم السلك والكابل</span>
   </div>
@@ -606,21 +607,23 @@
 <!-- FOOTER -->
 <footer class="va-footer">
   <div class="va-footer-brand">
-    <img src="../assets/icons/favicon.png" alt="Volt Ampere">
+    <div class="va-logo-box">
+      <span class="v">V</span><span class="a">A</span>
+    </div>
     <div>
       <div class="va-footer-name"><span class="v">Volt</span> <span class="a">Ampere</span></div>
       <div class="va-footer-sub">voampere.com — للمهندسين العرب</div>
     </div>
   </div>
   <div class="va-footer-links">
-    <a href="../index.html">الرئيسية</a>
-    <a href="../index.html#all">الحاسبات</a>
-    <a href="../pages/contact.html">تواصل</a>
+    <a href="/index.html">الرئيسية</a>
+    <a href="/index.html#all">الحاسبات</a>
+    <a href="/pages/contact.html">تواصل</a>
   </div>
-  <div class="va-footer-copy">&copy; Volt Ampere 2025 — IEC 60364</div>
+  <div class="va-footer-copy">&copy; Volt Ampere 2025</div>
 </footer>
 
-<script src="../js/main.js"></script>
+<script src="/js/main.js"></script>
 <script>
 /* ── Wire data ── */
 const SIZES   = [1.5, 2.5, 4, 6, 10, 16, 25, 35, 50];

@@ -1,26 +1,224 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" data-theme="light">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Volt Ampere — حاسبة</title>
-<link rel="icon" href="../assets/icons/favicon.ico">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Tajawal:wght@300;400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/theme.css">
-<link rel="stylesheet" href="../css/components.css">
-<style>.page-wrap{max-width:700px;margin:4rem auto;padding:0 2rem;}</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="حاسبة ألوان المقاومات — حدد قيمة المقاومة من ألوان الحلقات — Volt Ampere">
+<title>ألوان المقاومات — Volt Ampere</title>
+<link rel="icon"             type="image/x-icon" href="/assets/icons/favicon.ico">
+<link rel="icon"             type="image/png"    href="/assets/icons/favicon.png" sizes="32x32">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/theme.css">
+<link rel="stylesheet" href="/css/components.css">
+<style>
+.page-wrap { max-width: 960px; margin: 0 auto; padding: 0 2rem 5rem; }
+.breadcrumb { display: flex; align-items: center; gap: 8px; padding: 1.5rem 0; font-size: 14px; color: var(--muted); font-family: 'Tajawal', sans-serif; }
+.breadcrumb a { color: var(--muted); text-decoration: none; transition: color .15s; }
+.breadcrumb a:hover { color: var(--blue); }
+.breadcrumb .sep { color: var(--border); }
+.page-hero { display: grid; grid-template-columns: 1fr 200px; gap: 2.5rem; align-items: center; padding: 1.5rem 0 2.5rem; border-bottom: 2px solid var(--border); margin-bottom: 3rem; }
+@media(max-width:620px){ .page-hero{grid-template-columns:1fr;} .hero-badge-big{display:none;} }
+.page-tag { margin-bottom: .8rem; }
+.page-hero h1 { font-size: clamp(2rem,4vw,2.9rem); font-weight: 900; margin-bottom: .8rem; }
+.page-sub { font-family:'Tajawal',sans-serif; font-size:1.05rem; color:var(--muted); line-height:1.85; max-width:500px; }
+.hero-badge-big { background: var(--card); border: 2px solid var(--border); border-radius: 20px; padding: 1.8rem; text-align: center; box-shadow: var(--shadow); }
+.hbb-eq { font-family: 'Amiri', serif; font-size: 1.5rem; font-weight: 700; line-height: 1.15; margin-bottom: .4rem; }
+.hbb-sub { font-size: 11px; color: var(--muted); font-family: 'Tajawal', sans-serif; }
+.sec-bar { display: flex; align-items: center; gap: 12px; font-size: 1.2rem; font-weight: 800; color: var(--text); margin-bottom: 1.8rem; }
+.sec-bar::before { content:''; width:4px; height:1.3rem; background:var(--blue); border-radius:3px; flex-shrink:0; }
+.calc-card { background: var(--card); border: 1.5px solid var(--border); border-radius: 20px; padding: 2rem; box-shadow: var(--shadow); margin-bottom: 3.5rem; }
+
+.resistor-visual {
+  height: 120px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 2rem;
+  position: relative;
+}
+.res-body {
+  width: 220px; height: 50px; background: #dcd6c0; border-radius: 25px;
+  display: flex; align-items: center; justify-content: space-evenly; padding: 0 20px;
+  position: relative; box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+}
+.res-lead { width: 40px; height: 4px; background: #aaa; }
+.band { width: 12px; height: 100%; }
+
+.band-0 { background: #000; }
+.band-1 { background: #8B4513; }
+.band-2 { background: #f00; }
+.band-3 { background: #ffa500; }
+.band-4 { background: #ff0; }
+.band-5 { background: #008000; }
+.band-6 { background: #00f; }
+.band-7 { background: #800080; }
+.band-8 { background: #808080; }
+.band-9 { background: #fff; }
+.band-gold { background: #ffd700; }
+.band-silver { background: #c0c0c0; }
+
+.inp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 2.5rem; }
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field label { font-size: 14px; color: var(--muted); font-family: 'Tajawal', sans-serif; font-weight: 600; }
+.color-select { 
+  display: flex; align-items: center; gap: 10px; padding: 10px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--surface);
+}
+.dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.1); }
+
+.res-result { background: var(--blue-soft); border: 1.5px solid var(--blue); border-radius: 14px; padding: 1.5rem; text-align: center; }
+.rv { font-size: 2.5rem; font-weight: 900; color: var(--blue); display: block; direction: ltr; margin-bottom: 5px; }
+.rn { font-size: 14px; color: var(--muted); font-family: 'Tajawal', sans-serif; }
+</style>
 </head>
 <body>
+
 <nav class="va-nav z1">
-  <a href="../index.html" class="va-logo">
-    <img src="../assets/icons/favicon.png" alt="VA" style="width:34px;border-radius:5px">
+  <a href="/index.html" class="va-logo">
+    <div class="va-logo-box"><span class="v">V</span><span class="a">A</span></div>
     <div class="va-logo-text"><b><span class="v">Volt</span> <span class="a">Ampere</span></b><small>voampere.com</small></div>
   </a>
-  <ul class="va-nav-links"><li><a href="../index.html">الرئيسية</a></li><li><a href="../index.html#all">الحاسبات</a></li></ul>
+  <ul class="va-nav-links">
+    <li><a href="/index.html">الرئيسية</a></li>
+    <li><a href="/index.html#all">الحاسبات</a></li>
+    <li><a href="/pages/about.html">عن المنصة</a></li>
+  </ul>
   <div class="va-nav-end">
     <span class="theme-icon" id="theme-icon">🌙</span>
     <button class="theme-btn" onclick="Theme.toggle()"></button>
+    <a href="/pages/about.html" class="va-badge">دليل المنصة</a>
   </div>
 </nav>
-<div class="page-wrap z1"><h2 style="margin-bottom:1rem">🚧 الصفحة قيد البناء</h2><p style="font-family:'Tajawal',sans-serif;color:var(--muted)">سيتم إضافة هذه الحاسبة قريباً بشرح تفصيلي للصيغة والتطبيقات.</p><br><a href="../index.html" class="btn btn-blue">← العودة للرئيسية</a></div>
-<script src="../js/main.js"></script>
-</body></html>
+
+<div class="page-wrap z1">
+  <div class="breadcrumb anim-fadeup">
+    <a href="/index.html">الرئيسية</a><span class="sep">/</span>
+    <a href="/index.html#all">الحاسبات</a><span class="sep">/</span>
+    <span style="color:var(--text);font-weight:700">ألوان المقاومات</span>
+  </div>
+
+  <div class="page-hero anim-fadeup">
+    <div>
+      <div class="page-tag"><span class="tag tag-p">إلكترونيات</span></div>
+      <h1>ألوان <em class="text-blue">المقاومات</em></h1>
+      <p class="page-sub">حدد قيمة المقاومة الكهربائية ونسبة التفاوت (Tolerance) بسهولة من خلال حلقات الألوان.</p>
+    </div>
+    <div class="hero-badge-big">
+      <div class="hbb-eq">R = (A·10 + B) · 10<sup>C</sup></div>
+      <div class="hbb-sub">EIA Color Code Standard</div>
+    </div>
+  </div>
+
+  <div class="calc-card anim-fadeup anim-delay1">
+    <div class="sec-bar">حاسبة 4 حلقات</div>
+    
+    <div class="resistor-visual">
+       <div class="res-lead"></div>
+       <div class="res-body">
+         <div id="vband1" class="band band-1" style="border-radius: 2px"></div>
+         <div id="vband2" class="band band-0"></div>
+         <div id="vband3" class="band band-2"></div>
+         <div id="vband4" class="band band-gold" style="margin-left: 20px"></div>
+       </div>
+       <div class="res-lead"></div>
+    </div>
+
+    <div class="inp-grid">
+      <div class="field">
+        <label>الحلقة 1 (الرقم الأول)</label>
+        <select id="b1" onchange="runCalc()">
+          <option value="0" style="background:#000;color:#fff">أسود (0)</option>
+          <option value="1" selected style="background:#8B4513;color:#fff">بني (1)</option>
+          <option value="2" style="background:#f00;color:#fff">أحمر (2)</option>
+          <option value="3" style="background:#ffa500">برتقالي (3)</option>
+          <option value="4" style="background:#ff0">أصفر (4)</option>
+          <option value="5" style="background:#008000;color:#fff">أخضر (5)</option>
+          <option value="6" style="background:#00f;color:#fff">أزرق (6)</option>
+          <option value="7" style="background:#800080;color:#fff">بنفسجي (7)</option>
+          <option value="8" style="background:#808080;color:#fff">رمادي (8)</option>
+          <option value="9" style="background:#fff">أبيض (9)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>الحلقة 2 (الرقم الثاني)</label>
+        <select id="b2" onchange="runCalc()">
+          <option value="0" selected style="background:#000;color:#fff">أسود (0)</option>
+          <option value="1" style="background:#8B4513;color:#fff">بني (1)</option>
+          <option value="2" style="background:#f00;color:#fff">أحمر (2)</option>
+          <option value="3" style="background:#ffa500">برتقالي (3)</option>
+          <option value="4" style="background:#ff0">أصفر (4)</option>
+          <option value="5" style="background:#008000;color:#fff">أخضر (5)</option>
+          <option value="6" style="background:#00f;color:#fff">أزرق (6)</option>
+          <option value="7" style="background:#800080;color:#fff">بنفسجي (7)</option>
+          <option value="8" style="background:#808080;color:#fff">رمادي (8)</option>
+          <option value="9" style="background:#fff">أبيض (9)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>الحلقة 3 (المضاعف)</label>
+        <select id="b3" onchange="runCalc()">
+          <option value="1" style="background:#000;color:#fff">أسود (x1)</option>
+          <option value="10" style="background:#8B4513;color:#fff">بني (x10)</option>
+          <option value="100" selected style="background:#f00;color:#fff">أحمر (x100)</option>
+          <option value="1000" style="background:#ffa500">برتقالي (x1k)</option>
+          <option value="10000" style="background:#ff0">أصفر (x10k)</option>
+          <option value="100000" style="background:#008000;color:#fff">أخضر (x100k)</option>
+          <option value="1000000" style="background:#00f;color:#fff">أزرق (x1M)</option>
+          <option value="0.1" style="background:#ffd700">ذهب (x0.1)</option>
+          <option value="0.01" style="background:#c0c0c0">فضة (x0.01)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>الحلقة 4 (التفاوت)</label>
+        <select id="b4" onchange="runCalc()">
+          <option value="1" style="background:#8B4513;color:#fff">بني (±1%)</option>
+          <option value="2" style="background:#f00;color:#fff">أحمر (±2%)</option>
+          <option value="5" selected style="background:#ffd700">ذهب (±5%)</option>
+          <option value="10" style="background:#c0c0c0">فضة (±10%)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="res-result">
+      <span class="rv" id="res-val">1000 Ω</span>
+      <span class="rn" id="res-tol">بنسبة تفاوت ±5%</span>
+    </div>
+  </div>
+</div>
+
+<footer class="va-footer">
+  <div class="va-footer-brand"><div class="va-logo-box"><span class="v">V</span><span class="a">A</span></div><div><div class="va-footer-name"><span class="v">Volt</span> <span class="a">Ampere</span></div><div class="va-footer-sub">voampere.com — للمهندسين العرب</div></div></div>
+  <div class="va-footer-links"><a href="/index.html">الرئيسية</a><a href="/index.html#all">الحاسبات</a><a href="/pages/contact.html">تواصل</a></div>
+  <div class="va-footer-copy">&copy; Volt Ampere 2025</div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script>
+const COLOR_MAP = {
+  '0': 'band-0', '1': 'band-1', '2': 'band-2', '3': 'band-3', '4': 'band-4',
+  '5': 'band-5', '6': 'band-6', '7': 'band-7', '8': 'band-8', '9': 'band-9',
+  '10': 'band-1', '100': 'band-2', '1000': 'band-3', '10000': 'band-4', '100000': 'band-5', '1000000': 'band-6',
+  '0.1': 'band-gold', '0.01': 'band-silver', '5': 'band-gold'
+};
+
+function runCalc() {
+  const v1 = parseInt(VA.val('b1'));
+  const v2 = parseInt(VA.val('b2'));
+  const mul = parseFloat(VA.val('b3'));
+  const tol = VA.val('b4');
+  
+  const value = (v1 * 10 + v2) * mul;
+  let display = value + " Ω";
+  if(value >= 1000000) display = (value/1000000).toFixed(2) + " MΩ";
+  else if(value >= 1000) display = (value/1000).toFixed(2) + " kΩ";
+  
+  VA.set('res-val', display);
+  VA.set('res-tol', `بنسبة تفاوت ±${tol}%`);
+  
+  // Visual Update
+  document.getElementById('vband1').className = 'band ' + COLOR_MAP[v1];
+  document.getElementById('vband2').className = 'band ' + COLOR_MAP[v2];
+  document.getElementById('vband3').className = 'band ' + COLOR_MAP[mul];
+  document.getElementById('vband4').className = 'band ' + COLOR_MAP[tol];
+}
+document.addEventListener('DOMContentLoaded', runCalc);
+</script>
+</body>
+</html>

@@ -14,7 +14,17 @@
 }
 
 .va-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.va-logo img { width: 38px; height: 38px; object-fit: contain; border-radius: 6px; }
+.va-logo-box {
+  width: 38px; height: 38px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 14px;
+  box-shadow: inset 0 0 10px rgba(21,96,204,0.05);
+}
+.va-logo-box .v { color: var(--red); }
+.va-logo-box .a { color: var(--blue); margin-right: -2px; }
 
 .va-logo-text b {
   font-size: 17px; font-weight: 800; color: var(--text); letter-spacing: -.3px; display: block;

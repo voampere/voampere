@@ -1,26 +1,68 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" data-theme="light">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Volt Ampere</title>
-<link rel="icon" href="../assets/icons/favicon.ico">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Tajawal:wght@300;400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/theme.css">
-<link rel="stylesheet" href="../css/components.css">
-<style>.page-wrap{max-width:700px;margin:4rem auto;padding:0 2rem;}</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تواصل معنا — Volt Ampere</title>
+<link rel="stylesheet" href="/css/theme.css">
+<link rel="stylesheet" href="/css/components.css">
+<style>
+.content-wrap { max-width: 600px; margin: 4rem auto; padding: 2rem; background: var(--card); border: 1.5px solid var(--border); border-radius: 20px; box-shadow: var(--shadow); }
+h1 { margin-bottom: 2rem; font-size: 2.2rem; text-align: center; }
+.contact-item { display: flex; align-items: center; gap: 15px; margin-bottom: 1.5rem; padding: 1rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: all .2s; }
+.contact-item:hover { border-color: var(--blue); transform: translateY(-2px); }
+.contact-icon { font-size: 1.5rem; }
+.contact-info b { display: block; font-size: 1rem; color: var(--text); }
+.contact-info span { font-size: 13px; color: var(--muted); font-family: 'Tajawal', sans-serif; }
+</style>
 </head>
 <body>
+
 <nav class="va-nav z1">
-  <a href="../index.html" class="va-logo">
-    <img src="../assets/icons/favicon.png" alt="VA" style="width:34px;border-radius:5px">
+  <a href="/index.html" class="va-logo">
+    <div class="va-logo-box"><span class="v">V</span><span class="a">A</span></div>
     <div class="va-logo-text"><b><span class="v">Volt</span> <span class="a">Ampere</span></b><small>voampere.com</small></div>
   </a>
-  <ul class="va-nav-links"><li><a href="../index.html">الرئيسية</a></li></ul>
+  <ul class="va-nav-links">
+    <li><a href="/index.html">الرئيسية</a></li>
+    <li><a href="/index.html#all">الحاسبات</a></li>
+    <li><a href="/pages/about.html">عن المنصة</a></li>
+    <li><a href="/pages/contact.html" class="active">تواصل</a></li>
+  </ul>
   <div class="va-nav-end">
     <span class="theme-icon" id="theme-icon">🌙</span>
     <button class="theme-btn" onclick="Theme.toggle()"></button>
+    <a href="https://linkedin.com/in/salahghoudi" target="_blank" class="va-badge">م. صالح الغودي</a>
   </div>
 </nav>
-<div class="page-wrap z1"><h2 style="margin-bottom:1rem">🚧 قريباً</h2><p style="font-family:'Tajawal',sans-serif;color:var(--muted)">هذه الصفحة قيد الإنشاء.</p></div>
-<script src="../js/main.js"></script>
-</body></html>
+
+<div class="content-wrap anim-fadeup">
+  <h1>تواصل <span class="text-blue">معنا</span></h1>
+  <p style="text-align:center; color:var(--muted); margin-bottom:2rem; font-family:'Tajawal', sans-serif">نسعد باستقبال اقتراحاتكم لتطوير المنصة أو الإبلاغ عن أي خطأ تقني.</p>
+  
+  <a href="mailto:voampere@gmail.com" class="contact-item">
+    <span class="contact-icon">📧</span>
+    <div class="contact-info">
+      <b>البريد الإلكتروني</b>
+      <span>voampere@gmail.com</span>
+    </div>
+  </a>
+
+  <a href="https://linkedin.com/in/ghoudimsl" target="_blank" class="contact-item">
+    <span class="contact-icon">🔗</span>
+    <div class="contact-info">
+      <b>LinkedIn</b>
+      <span>صالح الغودي — Salah Ghoudi</span>
+    </div>
+  </a>
+</div>
+
+<footer class="va-footer">
+  <div class="va-footer-brand"><div class="va-logo-box"><span class="v">V</span><span class="a">A</span></div><div><div class="va-footer-name"><span class="v">Volt</span> <span class="a">Ampere</span></div><div class="va-footer-sub">voampere.com — للمهندسين العرب</div></div></div>
+  <div class="va-footer-links"><a href="/index.html">الرئيسية</a><a href="/index.html#all">الحاسبات</a><a href="/pages/about.html">عن المنصة</a></div>
+  <div class="va-footer-copy">&copy; Volt Ampere 2025 | م. صالح الغودي</div>
+</footer>
+
+<script src="/js/main.js"></script>
+</body>
+</html>
