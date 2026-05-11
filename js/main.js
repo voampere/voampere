@@ -35,7 +35,10 @@ const Theme = {
 function initNav() {
   const path = window.location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.va-nav-links a').forEach(a => {
-    if (a.getAttribute('href') === path) a.classList.add('active');
+    const href = a.getAttribute('href');
+    if (href && (href === path || href.endsWith('/' + path) || (path === 'index.html' && href.endsWith('../index.html')))) {
+      a.classList.add('active');
+    }
   });
 }
 
