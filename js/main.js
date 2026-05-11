@@ -5,7 +5,7 @@
 
 /* ══════════════════════════════════════
    THEME MANAGER
-══════════════════════════════════════ */
+   ══════════════════════════════════════ */
 const Theme = {
   KEY: 'va-theme',
 
@@ -31,7 +31,7 @@ const Theme = {
 
 /* ══════════════════════════════════════
    NAV — active link highlight
-══════════════════════════════════════ */
+   ══════════════════════════════════════ */
 function initNav() {
   const path = window.location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.va-nav-links a').forEach(a => {
@@ -44,7 +44,7 @@ function initNav() {
 
 /* ══════════════════════════════════════
    NUMBER HELPERS
-══════════════════════════════════════ */
+   ══════════════════════════════════════ */
 const VA = {
   /** Parse a float from an input element, fallback to 0 */
   val(id, fallback = 0) {
@@ -72,12 +72,24 @@ const VA = {
   fmt(n, unit = '', decimals = 2) {
     if (isNaN(n) || !isFinite(n)) return '—';
     return n.toFixed(decimals) + (unit ? ' ' + unit : '');
+  },
+
+  /** Copy text to clipboard */
+  copy(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const text = el.innerText.split('\n')[0]; // only the value
+    navigator.clipboard.writeText(text).then(() => {
+      const originalText = el.innerText;
+      el.innerText = '✅ تم النسخ';
+      setTimeout(() => el.innerText = originalText, 1500);
+    });
   }
 };
 
 /* ══════════════════════════════════════
    TABS MANAGER
-══════════════════════════════════════ */
+   ══════════════════════════════════════ */
 function initTabs(panels, onSwitch) {
   return function switchTab(name, btn, colorClass) {
     panels.forEach(p => {
@@ -91,9 +103,24 @@ function initTabs(panels, onSwitch) {
 }
 
 /* ══════════════════════════════════════
-   DOMAIN FILTER (calculator grid)
-══════════════════════════════════════ */
+   VA CALCULATOR FILTERS (HOME PAGE)
+   ══════════════════════════════════════ */
+function filterCalculators() {
+  const query = document.getElementById('global-search')?.value.toLowerCase() || '';
+  const cards = document.querySelectorAll('.ccard');
+  
+  cards.forEach(card => {
+    const title = card.querySelector('.ccard-title')?.innerText.toLowerCase() || '';
+    const desc = card.querySelector('.ccard-desc')?.innerText.toLowerCase() || '';
+    const visible = title.includes(query) || desc.includes(query);
+    card.style.display = visible ? '' : 'none';
+  });
+}
+
 function filterDomain(domain, el) {
+  const queryInput = document.getElementById('global-search');
+  if (queryInput) queryInput.value = '';
+
   document.querySelectorAll('.dpill').forEach(p => p.classList.remove('on'));
   if (el) el.classList.add('on');
   document.querySelectorAll('.ccard').forEach(card => {
@@ -103,8 +130,16 @@ function filterDomain(domain, el) {
 
 /* ══════════════════════════════════════
    BOOT
-══════════════════════════════════════ */
+   ══════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   Theme.init();
   initNav();
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').then(reg => {
+        console.log('Volt Ampere SW Ready');
+      }).catch(err => console.log('SW Fail:', err));
+    });
+  }
 });

@@ -1,0 +1,21 @@
+{
+  "name": "Volt Ampere",
+  "short_name": "Volt Ampere",
+  "description": "منصة الحسابات الكهربائية للمهندسين العرب",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#1560cc",
+  "icons": [
+    {
+      "src": "assets/icons/favicon.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

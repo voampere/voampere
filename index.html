@@ -3,17 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Volt Ampere — أول منصة حسابات كهربائية عربية متخصصة للمهندسين والفنيين والطلاب">
-<meta name="keywords"    content="حاسبات كهربائية, هندسة كهربائية, قانون أوم, هبوط الجهد, حجم السلك">
-<meta property="og:title"       content="Volt Ampere — الحاسبات الكهربائية">
-<meta property="og:description" content="أدوات هندسية دقيقة للمهندسين العرب — مجانية وبلا إعلانات">
+<meta name="description" content="Volt Ampere — أول منصة حسابات كهربائية عربية متخصصة للمهندسين والفنيين والطلاب. أدوات دقيقة لحساب تبار الكابلات، هبوط الجهد، قانون أوم، تكلفة الكهرباء والمزيد.">
+<meta name="keywords"    content="حاسبات كهربائية, هندسة كهربائية, قانون أوم, هبوط الجهد, حجم السلك, الطاقة الشمسية, تيار المحرك, تصحيح معامل القدرة">
+<meta property="og:title"       content="Volt Ampere — الحاسبات الكهربائية الاحترافية">
+<meta property="og:description" content="أدوات تقنية دقيقة مبنية وفق المعايير الدولية (IEC) لمساعدة المهندسين العرب في تصميم وتنفيذ الأنظمة الكهربائية.">
 <meta property="og:image"       content="assets/images/logo.png">
+<meta property="og:url"         content="https://voampere.github.io/voampere/">
+<meta name="twitter:card"       content="summary_large_image">
 <title>Volt Ampere — الحاسبات الكهربائية للمهندسين العرب</title>
 
 <!-- Favicon -->
 <link rel="icon"             type="image/x-icon" href="assets/icons/favicon.ico">
 <link rel="icon"             type="image/png"    href="assets/icons/favicon.png" sizes="32x32">
 <link rel="apple-touch-icon"                     href="assets/images/logo.png">
+<link rel="manifest"                             href="manifest.json">
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,6 +51,25 @@
 
 /* Stats */
 .stats-wrap{max-width:1120px;margin:0 auto 4rem;padding:0 2rem;}
+
+/* Search */
+.search-box { position: relative; max-width: 500px; margin-top: 2rem; }
+.search-box input { 
+  width: 100%; 
+  padding: 14px 45px 14px 18px; 
+  border-radius: 12px; 
+  border: 2px solid var(--border); 
+  background: var(--card); 
+  color: var(--text); 
+  font-family: 'Tajawal', sans-serif; 
+  font-size: 15px; 
+  box-shadow: var(--shadow); 
+  transition: all .2s; 
+}
+.search-box input:focus { border-color: var(--blue); outline: none; box-shadow: 0 0 0 4px var(--blue-soft); }
+.search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); font-size: 18px; opacity: 0.5; pointer-events: none; }
+.search-box input::placeholder { color: var(--muted); opacity: 0.7; }
+
 .stats-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));border:1px solid var(--border);border-radius:14px;overflow:hidden;gap:1px;background:var(--border);box-shadow:var(--shadow);}
 .stat{background:var(--card);padding:1.25rem 1rem;text-align:center;transition:background .2s;}.stat:hover{background:var(--surface);}
 .stat-val{display:block;font-size:1.65rem;font-weight:900;letter-spacing:-1px;}.stat-val.red{color:var(--red);}.stat-val.blue{color:var(--blue);}
@@ -66,7 +88,11 @@
 .field input,.field select{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:9px 13px;font-size:14px;color:var(--text);font-family:'Cairo',sans-serif;outline:none;transition:border-color .18s,background .3s;}
 .field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,96,204,.10);}
 .results{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:.8rem;}
-.res{background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:1rem;text-align:center;transition:background .3s;}
+.res{background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:1rem;text-align:center;transition:all .2s;cursor:pointer;position:relative;}
+.res:hover{border-color:var(--blue);background:var(--surface);transform:translateY(-2px);}
+.res:active{transform:scale(0.98);}
+.res::after{content:'📋';position:absolute;top:5px;left:8px;font-size:10px;opacity:0;transition:opacity .2s;}
+.res:hover::after{opacity:0.5;}
 .res-val{display:block;font-size:1.4rem;font-weight:900;letter-spacing:-.5px;direction:ltr;}.res-val.red{color:var(--red);}.res-val.blue{color:var(--blue);}
 .res-lbl{font-size:11px;color:var(--muted);margin-top:3px;font-family:'Tajawal',sans-serif;}
 .note{font-size:11px;color:var(--muted);margin-top:10px;font-family:'Tajawal',sans-serif;line-height:1.6;}
@@ -125,7 +151,13 @@
     <div class="hero-label">أول منصة حسابات كهربائية عربية متخصصة</div>
     <h1><em class="text-red">Volt</em> <em class="text-blue">Ampere</em><br>حاسبات الهندسة الكهربائية</h1>
     <p class="hero-desc">أدوات تقنية دقيقة لكل حسابات الكهرباء اليومية — للمهندسين والفنيين والطلاب في جميع الدول العربية. معايير IEC معتمدة، مجانية وبلا إعلانات.</p>
-    <div class="hero-actions">
+    
+    <div class="search-box">
+      <input type="text" id="global-search" placeholder="ابحث عن حاسبة... (مثلاً: أوم، كابل، محرك)" onkeyup="filterCalculators()">
+      <span class="search-icon">🔍</span>
+    </div>
+
+    <div class="hero-actions" style="margin-top: 2rem;">
       <a href="#calc" class="btn btn-red">ابدأ الحساب ⚡</a>
       <a href="#all"  class="btn btn-blue">كل الحاسبات</a>
       <a href="pages/about.html" class="btn btn-ghost">عن المنصة</a>
@@ -174,10 +206,10 @@
         <div class="field"><label>المقاومة — R (أوم)</label><input type="number" id="or_" placeholder="—" oninput="calcOhm('r')"></div>
       </div>
       <div class="results">
-        <div class="res"><span class="res-val red"  id="orv">—</span><span class="res-lbl">جهد (V)</span></div>
-        <div class="res"><span class="res-val blue" id="ori">—</span><span class="res-lbl">تيار (A)</span></div>
-        <div class="res"><span class="res-val red"  id="orr">—</span><span class="res-lbl">مقاومة (Ω)</span></div>
-        <div class="res"><span class="res-val blue" id="orp">—</span><span class="res-lbl">قدرة (W)</span></div>
+        <div class="res" onclick="VA.copy('orv')"><span class="res-val red"  id="orv">—</span><span class="res-lbl">جهد (V)</span></div>
+        <div class="res" onclick="VA.copy('ori')"><span class="res-val blue" id="ori">—</span><span class="res-lbl">تيار (A)</span></div>
+        <div class="res" onclick="VA.copy('orr')"><span class="res-val red"  id="orr">—</span><span class="res-lbl">مقاومة (Ω)</span></div>
+        <div class="res" onclick="VA.copy('orp')"><span class="res-val blue" id="orp">—</span><span class="res-lbl">قدرة (W)</span></div>
       </div>
     </div>
 
@@ -190,9 +222,9 @@
         <div class="field"><label>نوع الموصل</label><select id="wm" onchange="calcWire()"><option value="cu">نحاس</option><option value="al">ألمنيوم</option></select></div>
       </div>
       <div class="results">
-        <div class="res"><span class="res-val blue" id="wrs">—</span><span class="res-lbl">المقطع (mm²)</span></div>
-        <div class="res"><span class="res-val red"  id="wrd">—</span><span class="res-lbl">هبوط الجهد %</span></div>
-        <div class="res"><span class="res-val blue" id="wrc">—</span><span class="res-lbl">قاطع حماية (A)</span></div>
+        <div class="res" onclick="VA.copy('wrs')"><span class="res-val blue" id="wrs">—</span><span class="res-lbl">المقطع (mm²)</span></div>
+        <div class="res" onclick="VA.copy('wrd')"><span class="res-val red"  id="wrd">—</span><span class="res-lbl">هبوط الجهد %</span></div>
+        <div class="res" onclick="VA.copy('wrc')"><span class="res-val blue" id="wrc">—</span><span class="res-lbl">قاطع حماية (A)</span></div>
       </div>
       <div id="wwarn" class="warn-box">⚠ هبوط الجهد يتجاوز 3% — يُنصح بزيادة مقطع السلك</div>
     </div>
@@ -206,9 +238,9 @@
         <div class="field"><label>نوع الشبكة</label><select id="pt" onchange="calcPower()"><option value="1">أحادي الطور</option><option value="3">ثلاثي الأطوار</option></select></div>
       </div>
       <div class="results">
-        <div class="res"><span class="res-val red"  id="pri">—</span><span class="res-lbl">التيار (A)</span></div>
-        <div class="res"><span class="res-val blue" id="prs">—</span><span class="res-lbl">القدرة الظاهرة (VA)</span></div>
-        <div class="res"><span class="res-val red"  id="prq">—</span><span class="res-lbl">القدرة الردّ فعلية (VAR)</span></div>
+        <div class="res" onclick="VA.copy('pri')"><span class="res-val red"  id="pri">—</span><span class="res-lbl">التيار (A)</span></div>
+        <div class="res" onclick="VA.copy('prs')"><span class="res-val blue" id="prs">—</span><span class="res-lbl">القدرة الظاهرة (VA)</span></div>
+        <div class="res" onclick="VA.copy('prq')"><span class="res-val red"  id="prq">—</span><span class="res-lbl">القدرة الردّ فعلية (VAR)</span></div>
       </div>
     </div>
 
@@ -245,9 +277,9 @@
         </div>
       </div>
       <div class="results">
-        <div class="res"><span class="res-val blue" id="crk">—</span><span class="res-lbl">kWh / شهر</span></div>
-        <div class="res"><span class="res-val red"  id="crc">—</span><span class="res-lbl">التكلفة / شهر ($)</span></div>
-        <div class="res"><span class="res-val blue" id="cry">—</span><span class="res-lbl">التكلفة / سنة ($)</span></div>
+        <div class="res" onclick="VA.copy('crk')"><span class="res-val blue" id="crk">—</span><span class="res-lbl">kWh / شهر</span></div>
+        <div class="res" onclick="VA.copy('crc')"><span class="res-val red"  id="crc">—</span><span class="res-lbl">التكلفة / شهر ($)</span></div>
+        <div class="res" onclick="VA.copy('cry')"><span class="res-val blue" id="cry">—</span><span class="res-lbl">التكلفة / سنة ($)</span></div>
       </div>
       <p class="note">* الأسعار متوسطات 2024 — تختلف حسب الشريحة الاستهلاكية ونوع المشترك (منزلي / تجاري / صناعي)</p>
     </div>
